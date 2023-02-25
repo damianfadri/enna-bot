@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="3.9.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Enna.Streamers.Application\Enna.Streamers.Application.csproj" />
+    <ProjectReference Include="..\Enna.Streamers.Domain.Discord\Enna.Streamers.Domain.Discord.csproj" />
+    <ProjectReference Include="..\Enna.Streamers.Domain.SeedWork\Enna.Streamers.Domain.SeedWork.csproj" />
+  </ItemGroup>
+
+</Project>
