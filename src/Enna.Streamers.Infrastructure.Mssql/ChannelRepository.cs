@@ -27,5 +27,11 @@ namespace Enna.Streamers.Infrastructure.Mssql
             return await _context.Channels
                 .FirstOrDefaultAsync(channel => channel.Id == id);
         }
+
+        public async Task Remove(Channel entity)
+        {
+            _context.Channels.Remove(entity);
+            await Task.CompletedTask;
+        }
     }
 }

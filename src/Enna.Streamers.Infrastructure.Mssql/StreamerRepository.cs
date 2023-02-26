@@ -32,5 +32,11 @@ namespace Enna.Streamers.Infrastructure.Mssql
                 .Include(streamer => streamer.Feeds)
                 .FirstOrDefaultAsync(streamer => streamer.Id == id);
         }
+
+        public async Task Remove(Streamer entity)
+        {
+            _context.Streamers.Remove(entity);
+            await Task.CompletedTask;
+        }
     }
 }
