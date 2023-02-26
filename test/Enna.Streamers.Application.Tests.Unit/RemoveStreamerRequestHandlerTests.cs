@@ -67,7 +67,6 @@ namespace Enna.Streamers.Application.Tests.Unit
                 await handler.Handle(
                     new RemoveStreamerRequest(streamer.Id),
                     CancellationToken.None);
-
             }
         }
     }
