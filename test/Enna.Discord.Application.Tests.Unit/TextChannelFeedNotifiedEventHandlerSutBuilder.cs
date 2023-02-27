@@ -3,7 +3,7 @@ using Enna.Discord.Application.Handlers;
 using Enna.Discord.Domain;
 using Moq;
 
-namespace Enna.Streamers.Application.Tests.Unit
+namespace Enna.Discord.Application.Tests.Unit
 {
     public class TextChannelFeedNotifiedEventHandlerSutBuilder
     {

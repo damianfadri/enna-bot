@@ -4,7 +4,7 @@ using Enna.Streamers.Domain.Events;
 using FluentAssertions;
 using Xunit;
 
-namespace Enna.Streamers.Application.Tests.Unit
+namespace Enna.Discord.Application.Tests.Unit
 {
     public class TextChannelFeedNotifiedEventHandlerTests
     {
@@ -44,7 +44,7 @@ namespace Enna.Streamers.Application.Tests.Unit
 
                 var feed = new Feed(Guid.NewGuid(), FeedType.Console);
                 var channel = new Channel(
-                    Guid.NewGuid(), 
+                    Guid.NewGuid(),
                     "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/stream-link");
@@ -73,7 +73,7 @@ namespace Enna.Streamers.Application.Tests.Unit
 
                 channel.GoLive("https://youtube.com/stream-link");
 
-                var sut = () => 
+                var sut = () =>
                     handler.Handle(
                         new FeedNotifiedEvent(
                             feed,
