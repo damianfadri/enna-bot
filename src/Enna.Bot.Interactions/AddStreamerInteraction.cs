@@ -3,7 +3,7 @@ using Discord.Interactions;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 
-namespace Enna.Streamers.Application.Discord.Interactions
+namespace Enna.Bot.Interactions
 {
     public class AddStreamerInteraction
         : InteractionModuleBase<SocketInteractionContext>

@@ -4,7 +4,7 @@ using Enna.Streamers.Application.Contracts;
 using MediatR;
 using System.Text;
 
-namespace Enna.Streamers.Application.Discord.Interactions
+namespace Enna.Bot.Interactions
 {
     public class ListStreamersInteraction
         : InteractionModuleBase<SocketInteractionContext>

@@ -1,16 +1,16 @@
-﻿using Discord;
-using Discord.Interactions;
+﻿using Discord.Interactions;
+using Discord;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 
-namespace Enna.Streamers.Application.Discord.Interactions
+namespace Enna.Bot.Interactions
 {
-    public class AddTextChannelFeedInteraction
-        : InteractionModuleBase<SocketInteractionContext>
+    public class RemoveStreamerInteraction
+            : InteractionModuleBase<SocketInteractionContext>
     {
         private readonly IMediator _mediator;
 
-        public AddTextChannelFeedInteraction(IMediator mediator)
+        public RemoveStreamerInteraction(IMediator mediator)
         {
             ArgumentNullException.ThrowIfNull(mediator);
 
@@ -18,26 +18,20 @@ namespace Enna.Streamers.Application.Discord.Interactions
         }
 
         [SlashCommand(
-            name: "add-feed-discord",
-            description: "Adds a text channel notifier for a streamer.")]
+            name: "remove-streamer",
+            description: "Removes a streamer.")]
         public async Task ExecuteInteractionAsync(
             [Summary(
                 name: "streamer-id",
                 description: "Id of the streamer.")]
-                string rawStreamerId,
-            [Summary(
-                name: "channel" ,
-                description: "Channel where the message will be sent.")]
-                ITextChannel channel)
+                string rawStreamerId)
         {
-            await DeferAsync(true);
-
             if (!Guid.TryParse(rawStreamerId, out var streamerId))
             {
                 await FollowupAsync(
                     ephemeral: true,
                     embed: new EmbedBuilder()
-                        .WithTitle("Feed Not Added")
+                        .WithTitle("Streamer Not Removed")
                         .WithDescription(
                             $"Streamer id '{rawStreamerId}' is malformed.")
                         .WithColor(Color.Red)
@@ -54,7 +48,7 @@ namespace Enna.Streamers.Application.Discord.Interactions
                 await FollowupAsync(
                     ephemeral: true,
                     embed: new EmbedBuilder()
-                        .WithTitle("Feed Not Added")
+                        .WithTitle("Streamer Not Removed")
                         .WithDescription(
                             $"Streamer id '{rawStreamerId}' does not exist.")
                         .WithColor(Color.Red)
@@ -63,34 +57,15 @@ namespace Enna.Streamers.Application.Discord.Interactions
                 return;
             }
 
-            var feedId = Guid.NewGuid();
-
-            try
-            {
-                await _mediator.Send(
-                    new AddFeedRequest(feedId, streamerId, "discord"));
-            }
-            catch (Exception ex)
-            {
-                await FollowupAsync(
-                   ephemeral: true,
-                   embed: new EmbedBuilder()
-                       .WithTitle("Feed Not Added")
-                       .WithDescription(ex.Message)
-                       .WithColor(Color.Red)
-                       .Build());
-            }
-
             await _mediator.Send(
-                new AddTextChannelFeedRequest(
-                    feedId, channel.GuildId, channel.Id));
+                new RemoveStreamerRequest(streamerId));
 
             await FollowupAsync(
                 ephemeral: true,
                 embed: new EmbedBuilder()
-                    .WithTitle("Feed Added")
+                    .WithTitle("Streamer Removed")
                     .WithDescription(
-                        $"Successfully added feed for streamer {streamer.Name}.\r\nId: {feedId}")
+                        $"Successfully removed {streamer.Name}.\r\nId: {streamerId}")
                     .WithColor(Color.Green)
                     .Build());
         }
