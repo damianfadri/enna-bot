@@ -1,6 +1,6 @@
-﻿using Enna.Streamers.Application.Handlers;
+﻿using Enna.Bot.SeedWork;
+using Enna.Streamers.Application.Handlers;
 using Enna.Streamers.Domain;
-using Enna.Streamers.Domain.SeedWork;
 using Moq;
 
 namespace Enna.Streamers.Application.Tests.Unit

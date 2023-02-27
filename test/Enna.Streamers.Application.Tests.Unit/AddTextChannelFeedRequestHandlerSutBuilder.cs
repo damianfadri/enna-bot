@@ -1,7 +1,7 @@
-﻿using Enna.Streamers.Application.Discord.Handlers;
+﻿using Enna.Bot.SeedWork;
+using Enna.Discord.Application.Handlers;
+using Enna.Discord.Domain;
 using Enna.Streamers.Domain;
-using Enna.Streamers.Domain.Discord;
-using Enna.Streamers.Domain.SeedWork;
 using Moq;
 
 namespace Enna.Streamers.Application.Tests.Unit

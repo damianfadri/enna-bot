@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Enna.Discord.Application.Contracts;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 

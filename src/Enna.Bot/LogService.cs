@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -32,7 +33,7 @@ namespace Enna.Bot
             await Task.CompletedTask;
         }
 
-        private async Task OnLog(Discord.LogMessage arg)
+        private async Task OnLog(LogMessage arg)
         {
             switch (arg.Severity)
             {

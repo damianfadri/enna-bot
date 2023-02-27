@@ -1,5 +1,5 @@
-﻿using Enna.Streamers.Domain;
-using Enna.Streamers.Domain.Discord;
+﻿using Enna.Discord.Domain;
+using Enna.Streamers.Domain;
 using Enna.Streamers.Domain.Events;
 using FluentAssertions;
 using Xunit;

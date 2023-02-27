@@ -1,8 +1,6 @@
-﻿using Discord;
-using Discord.WebSocket;
-using Enna.Streamers.Application.Discord.Handlers;
-using Enna.Streamers.Domain;
-using Enna.Streamers.Domain.Discord;
+﻿using Discord.WebSocket;
+using Enna.Discord.Application.Handlers;
+using Enna.Discord.Domain;
 using Moq;
 
 namespace Enna.Streamers.Application.Tests.Unit

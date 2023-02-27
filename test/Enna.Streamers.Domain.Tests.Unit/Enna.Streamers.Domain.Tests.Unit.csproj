@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Enna.Streamers.Domain.SeedWork\Enna.Streamers.Domain.SeedWork.csproj" />
     <ProjectReference Include="..\..\src\Enna.Streamers.Domain\Enna.Streamers.Domain.csproj" />
   </ItemGroup>
 

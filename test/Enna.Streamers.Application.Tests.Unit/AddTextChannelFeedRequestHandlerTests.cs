@@ -1,4 +1,4 @@
-﻿using Enna.Streamers.Application.Contracts;
+﻿using Enna.Discord.Application.Contracts;
 using Enna.Streamers.Domain;
 using FluentAssertions;
 using Xunit;
