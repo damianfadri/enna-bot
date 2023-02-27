@@ -16,9 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Enna.Bot.SeedWork\Enna.Bot.SeedWork.csproj" />
     <ProjectReference Include="..\Enna.Streamers.Application.Contracts\Enna.Streamers.Application.Contracts.csproj" />
-    <ProjectReference Include="..\Enna.Streamers.Domain.Discord\Enna.Streamers.Domain.Discord.csproj" />
-    <ProjectReference Include="..\Enna.Streamers.Domain.SeedWork\Enna.Streamers.Domain.SeedWork.csproj" />
     <ProjectReference Include="..\Enna.Streamers.Domain\Enna.Streamers.Domain.csproj" />
   </ItemGroup>
 

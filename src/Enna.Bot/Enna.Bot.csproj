@@ -27,10 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Enna.Streamers.Application.Discord\Enna.Streamers.Application.Discord.csproj" />
+    <ProjectReference Include="..\Enna.Bot.Infrastructure.Mssql\Enna.Bot.Infrastructure.Mssql.csproj" />
+    <ProjectReference Include="..\Enna.Bot.Infrastructure\Enna.Bot.Infrastructure.csproj" />
+    <ProjectReference Include="..\Enna.Discord.Application\Enna.Discord.Application.csproj" />
     <ProjectReference Include="..\Enna.Streamers.Application\Enna.Streamers.Application.csproj" />
-    <ProjectReference Include="..\Enna.Streamers.Infrastructure.Mssql\Enna.Streamers.Infrastructure.Mssql.csproj" />
-    <ProjectReference Include="..\Enna.Streamers.Infrastructure\Enna.Streamers.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

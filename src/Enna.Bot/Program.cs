@@ -1,9 +1,9 @@
 ﻿using Discord.WebSocket;
 using Enna.Bot;
+using Enna.Bot.Infrastructure;
+using Enna.Bot.Infrastructure.Mssql;
+using Enna.Discord.Application;
 using Enna.Streamers.Application;
-using Enna.Streamers.Application.Discord;
-using Enna.Streamers.Infrastructure;
-using Enna.Streamers.Infrastructure.Mssql;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

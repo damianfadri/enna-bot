@@ -1,6 +1,6 @@
-﻿using Enna.Streamers.Application.Contracts;
+﻿using Enna.Bot.SeedWork;
+using Enna.Streamers.Application.Contracts;
 using Enna.Streamers.Domain;
-using Enna.Streamers.Domain.SeedWork;
 
 namespace Enna.Streamers.Application.Workers
 {

@@ -1,5 +1,5 @@
-﻿using Enna.Streamers.Domain.Events;
-using Enna.Streamers.Domain.SeedWork;
+﻿using Enna.Bot.SeedWork;
+using Enna.Streamers.Domain.Events;
 using MediatR;
 
 namespace Enna.Streamers.Application.Handlers

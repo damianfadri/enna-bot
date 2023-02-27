@@ -1,4 +1,4 @@
-﻿using Enna.Streamers.Domain.SeedWork;
+﻿using Enna.Bot.SeedWork;
 using Xunit;
 
 namespace Enna.Streamers.Domain.Tests.Unit
