@@ -1,7 +1,9 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Enna.Discord.Application.Contracts;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
+using System.Text;
 
 namespace Enna.Bot.Interactions
 {
@@ -26,12 +28,14 @@ namespace Enna.Bot.Interactions
                 description: "Id of the streamer.")]
             string rawStreamerId)
         {
+            await DeferAsync(true);
+
             if (!Guid.TryParse(rawStreamerId, out var streamerId))
             {
                 await FollowupAsync(
                     ephemeral: true,
                     embed: new EmbedBuilder()
-                        .WithTitle("Streamer Not Removed")
+                        .WithTitle("Feed List")
                         .WithDescription(
                             $"Streamer id '{rawStreamerId}' is malformed.")
                         .WithColor(Color.Red)
@@ -48,7 +52,7 @@ namespace Enna.Bot.Interactions
                 await FollowupAsync(
                     ephemeral: true,
                     embed: new EmbedBuilder()
-                        .WithTitle("Streamer Not Removed")
+                        .WithTitle("Feed List")
                         .WithDescription(
                             $"Streamer id '{rawStreamerId}' does not exist.")
                         .WithColor(Color.Red)
@@ -59,6 +63,39 @@ namespace Enna.Bot.Interactions
 
             var feeds = await _mediator.Send(
                 new ListFeedsRequest(streamerId));
+
+            var feedDetailRequests =
+                feeds
+                    .Where(feed => feed.Type == "Discord")
+                    .Select(feed =>
+                        _mediator.Send(
+                            new GetTextChannelFeedRequest(feed.Id)));
+
+            var feedDetails = await Task.WhenAll(feedDetailRequests);
+
+            await FollowupAsync(
+                ephemeral: true,
+                embed: new EmbedBuilder()
+                    .WithTitle("Feed List")
+                    .WithDescription(
+                        BuildFeedListMessage(feedDetails))
+                    .WithColor(Color.Purple)
+                    .Build());
+        }
+
+        private string BuildFeedListMessage(
+            IEnumerable<TextChannelFeedDto> feeds)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var feed in feeds)
+            {
+                builder.AppendLine($"Id: {feed.Id}");
+                builder.AppendLine($"<#{feed.ChannelId}>");
+                builder.AppendLine("Template: @link");
+            }
+
+            return builder.ToString();
         }
     }
 }

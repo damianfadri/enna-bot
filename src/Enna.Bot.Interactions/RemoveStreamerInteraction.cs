@@ -26,6 +26,8 @@ namespace Enna.Bot.Interactions
                 description: "Id of the streamer.")]
                 string rawStreamerId)
         {
+            await DeferAsync(true);
+
             if (!Guid.TryParse(rawStreamerId, out var streamerId))
             {
                 await FollowupAsync(
