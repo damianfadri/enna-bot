@@ -2,6 +2,7 @@
 using Enna.Bot;
 using Enna.Bot.Infrastructure;
 using Enna.Bot.Infrastructure.Mssql;
+using Enna.Bot.Interactions;
 using Enna.Discord.Application;
 using Enna.Streamers.Application;
 using MediatR;
@@ -40,6 +41,7 @@ public class Program
                         config.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
                 services
+                    .AddInteractions()
                     .AddTextChannelFeedServices()
                     .AddStreamerInfrastructureServices()
                     .AddStreamerApplicationServices(configuration)

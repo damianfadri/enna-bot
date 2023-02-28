@@ -28,6 +28,13 @@ namespace Enna.Bot.Infrastructure.Mssql
                 .FirstOrDefaultAsync(feed => feed.Id == id);
         }
 
+        public async Task<IEnumerable<Feed>> FindByStreamerId(Guid streamerId)
+        {
+            return await _context.Feeds
+                .Where(feed => feed.Streamer.Id == streamerId)
+                .ToListAsync();
+        }
+
         public async Task Remove(Feed entity)
         {
             _context.Feeds.Remove(entity);

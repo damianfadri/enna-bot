@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Enna.Bot.Infrastructure.Mssql\Enna.Bot.Infrastructure.Mssql.csproj" />
     <ProjectReference Include="..\Enna.Bot.Infrastructure\Enna.Bot.Infrastructure.csproj" />
+    <ProjectReference Include="..\Enna.Bot.Interactions\Enna.Bot.Interactions.csproj" />
     <ProjectReference Include="..\Enna.Discord.Application\Enna.Discord.Application.csproj" />
     <ProjectReference Include="..\Enna.Streamers.Application\Enna.Streamers.Application.csproj" />
   </ItemGroup>
