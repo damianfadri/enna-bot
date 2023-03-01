@@ -7,21 +7,21 @@ namespace Enna.Discord.Application.Handlers
     public class GetTextChannelFeedRequestHandler
         : IRequestHandler<GetTextChannelFeedRequest, TextChannelFeedDto>
     {
-        private readonly ITextChannelFeedRepository _feedRepository;
+        private readonly ITextChannelFeedRepository _textChannelRepository;
 
         public GetTextChannelFeedRequestHandler(
-            ITextChannelFeedRepository feedRepository) 
+            ITextChannelFeedRepository textChannelRepository) 
         {
-            ArgumentNullException.ThrowIfNull(feedRepository);
+            ArgumentNullException.ThrowIfNull(textChannelRepository);
 
-            _feedRepository = feedRepository;
+            _textChannelRepository = textChannelRepository;
         }
 
         public async Task<TextChannelFeedDto> Handle(
             GetTextChannelFeedRequest request, 
             CancellationToken cancellationToken)
         {
-            var feed = await _feedRepository.FindById(request.FeedId);
+            var feed = await _textChannelRepository.FindById(request.FeedId);
 
             if (feed == null)
             {

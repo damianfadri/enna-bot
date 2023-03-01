@@ -62,9 +62,9 @@ namespace Enna.Streamers.Application.Tests.Unit
                 dtos.Should().HaveCount(2);
 
                 dtos.Should().Contain(
-                    dto => dto.Type == FeedType.Console.ToString());
+                    dto => dto.Type == "Console");
                 dtos.Should().Contain(
-                    dto => dto.Type == FeedType.Discord.ToString());
+                    dto => dto.Type == "Discord");
             }
 
             [Fact]
@@ -92,8 +92,8 @@ namespace Enna.Streamers.Application.Tests.Unit
                         CancellationToken.None);
 
                 dtos.Should().HaveCount(5);
-                dtos.Should().Contain(dto => dto.Type == FeedType.Console.ToString());
-                dtos.Should().NotContain(dto => dto.Type == FeedType.Discord.ToString());
+                dtos.Should().Contain(dto => dto.Type == "Console");
+                dtos.Should().NotContain(dto => dto.Type == "Discord");
             }
         }
     }
