@@ -29,7 +29,11 @@ namespace Enna.Bot.Infrastructure.Mssql
                             QuerySplittingBehavior.SplitQuery));
                 })
                 .AddSingleton<IDomainEventDispatcher, DomainEventDispatcher>()
-                .AddSingleton<IUnitOfWork, UnitOfWork>();
+                .AddSingleton<IUnitOfWork, UnitOfWork>()
+
+                .AddScoped<ITenantProvider, TenantProvider>()
+                .AddScoped<ITenantRepository<ulong>, GuildTenantRepository>()
+                .AddTransient<ITenantAppender, TenantAppender>();
 
             return services;
         }

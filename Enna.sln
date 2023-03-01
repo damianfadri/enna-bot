@@ -19,13 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Streamers.Domain.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Streamers.Application.Tests.Unit", "test\Enna.Streamers.Application.Tests.Unit\Enna.Streamers.Application.Tests.Unit.csproj", "{E564FAD4-C336-4680-BD92-18E755B41427}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enna.Bot.Interactions", "src\Enna.Bot.Interactions\Enna.Bot.Interactions.csproj", "{36D8B8B0-24BA-4299-9F91-7EE310123A77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Bot.Interactions", "src\Enna.Bot.Interactions\Enna.Bot.Interactions.csproj", "{36D8B8B0-24BA-4299-9F91-7EE310123A77}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Discord.Domain", "src\Enna.Discord.Domain\Enna.Discord.Domain.csproj", "{72D55FE2-7D16-4CCA-9E09-6278BFE99D14}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Discord.Application", "src\Enna.Discord.Application\Enna.Discord.Application.csproj", "{6D511086-4ADA-4AE3-A8FF-D2117619B482}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enna.Discord.Application.Contracts", "src\Enna.Discord.Application.Contracts\Enna.Discord.Application.Contracts.csproj", "{41840433-1C3E-436F-BE17-61FC0DF9E421}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Discord.Application.Contracts", "src\Enna.Discord.Application.Contracts\Enna.Discord.Application.Contracts.csproj", "{41840433-1C3E-436F-BE17-61FC0DF9E421}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Bot.Infrastructure.Mssql", "src\Enna.Bot.Infrastructure.Mssql\Enna.Bot.Infrastructure.Mssql.csproj", "{1758828F-1D8A-4778-893D-5F5CABE15ED0}"
 EndProject
@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Bot.Infrastructure", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Bot.SeedWork", "src\Enna.Bot.SeedWork\Enna.Bot.SeedWork.csproj", "{AB478394-F6E1-4DAD-BB0C-982BA38C567B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enna.Discord.Application.Tests.Unit", "test\Enna.Discord.Application.Tests.Unit\Enna.Discord.Application.Tests.Unit.csproj", "{2B76F3D6-D465-4F0F-8998-37E9A49AC371}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enna.Discord.Application.Tests.Unit", "test\Enna.Discord.Application.Tests.Unit\Enna.Discord.Application.Tests.Unit.csproj", "{2B76F3D6-D465-4F0F-8998-37E9A49AC371}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

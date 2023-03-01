@@ -3,7 +3,7 @@ using Enna.Streamers.Domain.Events;
 
 namespace Enna.Streamers.Domain
 {
-    public class Channel : Entity
+    public class Channel : TenantEntity
     {
         public string Link { get; init; }
         public string? StreamLink { get; private set; }

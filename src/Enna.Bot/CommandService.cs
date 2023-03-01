@@ -1,5 +1,7 @@
 ﻿using Discord.Interactions;
 using Discord.WebSocket;
+using Enna.Bot.SeedWork;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Enna.Bot
@@ -51,6 +53,28 @@ namespace Enna.Bot
 
         private async Task OnInteractionCreated(SocketInteraction arg)
         {
+            if (arg.GuildId == null)
+            {
+                return;
+            }
+
+            using var scope = _provider.CreateScope();
+
+            var tenantRepository = _provider.GetRequiredService<ITenantRepository<ulong>>();
+            var tenant = await tenantRepository.FindByKey(arg.GuildId.Value);
+
+            if (tenant == null)
+            {
+                tenant = new Tenant<ulong>(
+                    Guid.NewGuid(), 
+                    arg.GuildId.Value);
+
+                await tenantRepository.Add(tenant);
+            }
+
+            var tenantProvider = _provider.GetRequiredService<ITenantProvider>();
+            tenantProvider.TenantId = tenant.Id;
+
             var context = new SocketInteractionContext(_client, arg);
             await _interaction.ExecuteCommandAsync(context, _provider);
         }
