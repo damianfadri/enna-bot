@@ -30,7 +30,6 @@ namespace Enna.Bot.Infrastructure.Mssql
             return await _context.Streamers
                 .Include(streamer => streamer.Channels)
                 .Include(streamer => streamer.Feeds)
-                .HasQuery
                 .FirstOrDefaultAsync(streamer => streamer.Id == id);
         }
 
