@@ -6,27 +6,31 @@ namespace Enna.Bot.Infrastructure.Mssql
     {
         public readonly IDomainEventDispatcher _dispatcher;
         private readonly ITenantAssigner _assigner;
-        private readonly StreamerContext _context;
+        private readonly StreamerContext _streamerContext;
+        private readonly TenantContext _tenantContext;
 
         public UnitOfWork(
             IDomainEventDispatcher dispatcher,
             ITenantAssigner assigner,
-            StreamerContext context)
+            StreamerContext streamerContext,
+            TenantContext tenantContext)
         {
             ArgumentNullException.ThrowIfNull(dispatcher);
             ArgumentNullException.ThrowIfNull(assigner);
-            ArgumentNullException.ThrowIfNull(context);
-
+            ArgumentNullException.ThrowIfNull(streamerContext);
+            ArgumentNullException.ThrowIfNull(tenantContext);
             _dispatcher = dispatcher;
             _assigner = assigner;
-            _context = context;
+            _streamerContext = streamerContext;
+            _tenantContext = tenantContext;
         }
 
         public async Task CommitAsync()
         {
             await _dispatcher.DispatchEventsAsync();
             await _assigner.AssignAsync();
-            await _context.SaveChangesAsync();
+            await _tenantContext.SaveChangesAsync();
+            await _streamerContext.SaveChangesAsync();
         }
     }
 }

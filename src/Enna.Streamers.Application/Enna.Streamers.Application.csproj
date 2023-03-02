@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Enna.Core.Application\Enna.Core.Application.csproj" />
     <ProjectReference Include="..\Enna.Streamers.Application.Contracts\Enna.Streamers.Application.Contracts.csproj" />
     <ProjectReference Include="..\Enna.Streamers.Domain\Enna.Streamers.Domain.csproj" />
   </ItemGroup>

@@ -7,15 +7,10 @@ using System.Text;
 namespace Enna.Bot.Interactions
 {
     public class ListStreamersInteraction
-        : InteractionModuleBase<SocketInteractionContext>
+        : TenantBaseInteraction
     {
-        private readonly IMediator _mediator;
-
-        public ListStreamersInteraction(IMediator mediator)
+        public ListStreamersInteraction(IMediator mediator) : base(mediator)
         {
-            ArgumentNullException.ThrowIfNull(mediator);
-
-            _mediator = mediator;
         }
 
         [SlashCommand(
@@ -25,8 +20,9 @@ namespace Enna.Bot.Interactions
         {
             await DeferAsync(true);
 
-            var streamers = await _mediator.Send(
-                new ListStreamersRequest());
+            var streamers =
+                await SendToTenantAsync<IEnumerable<StreamerDto>>(
+                    new ListStreamersRequest());
 
             if (!streamers.Any())
             {

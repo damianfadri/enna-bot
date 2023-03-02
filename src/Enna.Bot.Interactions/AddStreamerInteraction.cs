@@ -7,13 +7,8 @@ namespace Enna.Bot.Interactions
 {
     public class AddStreamerInteraction : TenantBaseInteraction
     {
-        private readonly IMediator _mediator;
-
         public AddStreamerInteraction(IMediator mediator) : base(mediator)
         {
-            ArgumentNullException.ThrowIfNull(mediator);
-
-            _mediator = mediator;
         }
 
         [SlashCommand(
@@ -33,7 +28,7 @@ namespace Enna.Bot.Interactions
 
             var streamerId = Guid.NewGuid();
 
-            await _mediator.Send(
+            await SendToTenantAsync(
                 new AddStreamerRequest(streamerId, name, link));
 
             await FollowupAsync(
