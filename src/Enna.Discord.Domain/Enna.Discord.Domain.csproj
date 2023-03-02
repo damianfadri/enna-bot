@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Enna.Bot.SeedWork\Enna.Bot.SeedWork.csproj" />
+    <ProjectReference Include="..\Enna.Streamers.Domain\Enna.Streamers.Domain.csproj" />
   </ItemGroup>
 
 </Project>

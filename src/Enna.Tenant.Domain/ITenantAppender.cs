@@ -1,4 +1,4 @@
-﻿namespace Enna.Bot.SeedWork
+﻿namespace Enna.Tenant.Domain
 {
     public interface ITenantAppender
     {

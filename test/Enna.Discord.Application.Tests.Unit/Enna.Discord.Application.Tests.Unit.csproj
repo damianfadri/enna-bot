@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Enna.Discord.Application\Enna.Discord.Application.csproj" />
-    <ProjectReference Include="..\..\src\Enna.Discord.Domain\Enna.Discord.Domain.csproj" />
   </ItemGroup>
 
 </Project>

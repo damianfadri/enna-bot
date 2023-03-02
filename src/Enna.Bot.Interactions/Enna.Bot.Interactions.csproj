@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Enna.Core.Domain\Enna.Core.Domain.csproj" />
     <ProjectReference Include="..\Enna.Discord.Application.Contracts\Enna.Discord.Application.Contracts.csproj" />
     <ProjectReference Include="..\Enna.Streamers.Application.Contracts\Enna.Streamers.Application.Contracts.csproj" />
   </ItemGroup>

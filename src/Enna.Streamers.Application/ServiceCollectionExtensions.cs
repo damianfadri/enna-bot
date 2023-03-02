@@ -16,8 +16,8 @@ namespace Enna.Streamers.Application
                 .Bind(configuration.GetSection(nameof(WorkerOptions)));
 
             services
-                .AddTransient<IWorker, FindLiveStreamersWorker>()
-                .AddHostedService<WorkerService>();
+                .AddTransient<IWorker, FindLiveStreamersWorker>();
+                // .AddHostedService<WorkerService>();
 
             return services;
         }

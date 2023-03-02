@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Discord.Domain;
 using Enna.Streamers.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +16,10 @@ namespace Enna.Bot.Infrastructure.Mssql
             IConfiguration configuration)
         {
             services
-                .AddSingleton<IStreamerRepository, StreamerRepository>()
-                .AddSingleton<IFeedRepository, FeedRepository>()
-                .AddSingleton<IChannelRepository, ChannelRepository>()
-                .AddSingleton<ITextChannelFeedRepository, TextChannelFeedRepository>()
+                .AddTransient<IStreamerRepository, StreamerRepository>()
+                .AddTransient<IFeedRepository, FeedRepository>()
+                .AddTransient<IChannelRepository, ChannelRepository>()
+                .AddTransient<ITextChannelFeedRepository, TextChannelFeedRepository>()
                 .AddDbContext<StreamerContext>(options =>
                 {
                     options.UseSqlServer(
@@ -28,12 +28,20 @@ namespace Enna.Bot.Infrastructure.Mssql
                         options => options.UseQuerySplittingBehavior(
                             QuerySplittingBehavior.SplitQuery));
                 })
-                .AddSingleton<IDomainEventDispatcher, DomainEventDispatcher>()
-                .AddSingleton<IUnitOfWork, UnitOfWork>()
+                .AddDbContext<TenantContext>(options =>
+                {
+                    options.UseSqlServer(
+                        configuration
+                            .GetConnectionString(DEFAULT_CONNECTION_STRING),
+                        options => options.UseQuerySplittingBehavior(
+                            QuerySplittingBehavior.SplitQuery));
+                })
+                .AddTransient<IDomainEventDispatcher, DomainEventDispatcher>()
+                .AddTransient<IUnitOfWork, UnitOfWork>()
 
                 .AddScoped<ITenantProvider, TenantProvider>()
-                .AddScoped<ITenantRepository<ulong>, GuildTenantRepository>()
-                .AddTransient<ITenantAppender, TenantAppender>();
+                .AddScoped<IGuildTenantRepository, GuildTenantRepository>()
+                .AddTransient<ITenantAssigner, TenantAssigner>();
 
             return services;
         }

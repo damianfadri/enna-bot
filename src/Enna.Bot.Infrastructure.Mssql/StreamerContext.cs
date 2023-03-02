@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Discord.Domain;
 using Enna.Streamers.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,6 @@ namespace Enna.Bot.Infrastructure.Mssql
 {
     public class StreamerContext : DbContext
     {
-        public DbSet<Tenant<ulong>> Tenants { get; set; }
         public DbSet<Streamer> Streamers { get; set; }
         public DbSet<Channel> Channels { get; set; }
         public DbSet<Feed> Feeds { get; set; }
@@ -23,7 +22,6 @@ namespace Enna.Bot.Infrastructure.Mssql
             ArgumentNullException.ThrowIfNull(tenantProvider);
 
             _tenantProvider = tenantProvider;
-            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

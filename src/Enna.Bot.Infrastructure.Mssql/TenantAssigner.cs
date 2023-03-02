@@ -1,15 +1,14 @@
-﻿using Enna.Bot.SeedWork;
-using Enna.Streamers.Domain;
+﻿using Enna.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Enna.Bot.Infrastructure.Mssql
 {
-    public class TenantAppender : ITenantAppender
+    public class TenantAssigner : ITenantAssigner
     {
         private readonly ITenantProvider _tenantProvider;
         private readonly StreamerContext _context;
 
-        public TenantAppender(
+        public TenantAssigner(
             ITenantProvider tenantProvider,
             StreamerContext context)
         {
@@ -20,7 +19,7 @@ namespace Enna.Bot.Infrastructure.Mssql
             _context = context;
         }
 
-        public async Task AppendAsync()
+        public async Task AssignAsync()
         {
             var addedEntities
                 = _context

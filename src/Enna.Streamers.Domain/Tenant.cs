@@ -1,4 +1,6 @@
-﻿namespace Enna.Bot.SeedWork
+﻿using Enna.Core.Domain;
+
+namespace Enna.Streamers.Domain
 {
     public class Tenant<TKey> : Entity where TKey : struct
     {

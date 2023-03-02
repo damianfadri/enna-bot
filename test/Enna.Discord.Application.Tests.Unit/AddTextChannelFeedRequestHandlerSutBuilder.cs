@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Discord.Application.Handlers;
 using Enna.Discord.Domain;
 using Enna.Streamers.Domain;

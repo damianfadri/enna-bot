@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Streamers.Domain.Events;
 
 namespace Enna.Streamers.Domain

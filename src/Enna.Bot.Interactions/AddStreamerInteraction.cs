@@ -5,12 +5,11 @@ using MediatR;
 
 namespace Enna.Bot.Interactions
 {
-    public class AddStreamerInteraction
-        : InteractionModuleBase<SocketInteractionContext>
+    public class AddStreamerInteraction : TenantBaseInteraction
     {
         private readonly IMediator _mediator;
 
-        public AddStreamerInteraction(IMediator mediator)
+        public AddStreamerInteraction(IMediator mediator) : base(mediator)
         {
             ArgumentNullException.ThrowIfNull(mediator);
 

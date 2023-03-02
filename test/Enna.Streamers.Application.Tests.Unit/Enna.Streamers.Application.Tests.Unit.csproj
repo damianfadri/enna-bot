@@ -24,9 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Enna.Bot.SeedWork\Enna.Bot.SeedWork.csproj" />
-    <ProjectReference Include="..\..\src\Enna.Discord.Application\Enna.Discord.Application.csproj" />
-    <ProjectReference Include="..\..\src\Enna.Discord.Domain\Enna.Discord.Domain.csproj" />
     <ProjectReference Include="..\..\src\Enna.Streamers.Application\Enna.Streamers.Application.csproj" />
   </ItemGroup>
 

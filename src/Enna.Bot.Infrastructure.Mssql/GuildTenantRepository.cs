@@ -1,13 +1,14 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Discord.Domain;
+using Enna.Streamers.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Enna.Bot.Infrastructure.Mssql
 {
-    public class GuildTenantRepository : ITenantRepository<ulong>
+    public class GuildTenantRepository : IGuildTenantRepository
     {
-        private readonly StreamerContext _context;
+        private readonly TenantContext _context;
 
-        public GuildTenantRepository(StreamerContext context) 
+        public GuildTenantRepository(TenantContext context) 
         {
             ArgumentNullException.ThrowIfNull(context);
 
@@ -31,11 +32,11 @@ namespace Enna.Bot.Infrastructure.Mssql
                     tenant => tenant.Id == id);
         }
 
-        public async Task<Tenant<ulong>?> FindByKey(ulong key)
+        public async Task<Tenant<ulong>?> FindByGuildId(ulong guildId)
         {
             return await _context.Tenants
                 .FirstOrDefaultAsync(
-                    tenant => tenant.KeyId == key);
+                    tenant => tenant.KeyId == guildId);
         }
 
         public async Task Remove(Tenant<ulong> entity)

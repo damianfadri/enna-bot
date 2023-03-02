@@ -1,31 +1,31 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 
 namespace Enna.Bot.Infrastructure.Mssql
 {
     public class UnitOfWork : IUnitOfWork
     {
         public readonly IDomainEventDispatcher _dispatcher;
-        private readonly ITenantAppender _appender;
+        private readonly ITenantAssigner _assigner;
         private readonly StreamerContext _context;
 
         public UnitOfWork(
             IDomainEventDispatcher dispatcher,
-            ITenantAppender appender,
+            ITenantAssigner assigner,
             StreamerContext context)
         {
             ArgumentNullException.ThrowIfNull(dispatcher);
-            ArgumentNullException.ThrowIfNull(appender);
+            ArgumentNullException.ThrowIfNull(assigner);
             ArgumentNullException.ThrowIfNull(context);
 
             _dispatcher = dispatcher;
-            _appender = appender;
+            _assigner = assigner;
             _context = context;
         }
 
         public async Task CommitAsync()
         {
             await _dispatcher.DispatchEventsAsync();
-            await _appender.AppendAsync();
+            await _assigner.AssignAsync();
             await _context.SaveChangesAsync();
         }
     }
