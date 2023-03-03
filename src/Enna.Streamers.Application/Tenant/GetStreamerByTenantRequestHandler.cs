@@ -3,12 +3,12 @@ using Enna.Core.Domain;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 
-namespace Enna.Streamers.Application.Handlers
+namespace Enna.Streamers.Application.Tenant
 {
-    public class ListStreamersByTenantRequestHandler
-        : MultitenantQueryHandler<IEnumerable<StreamerDto>>
+    public class GetStreamerByTenantRequestHandler
+        : MultitenantQueryHandler<StreamerDto>
     {
-        public ListStreamersByTenantRequestHandler(
+        public GetStreamerByTenantRequestHandler(
             IMediator mediator, 
             ITenantProvider tenantProvider) 
             : base(mediator, tenantProvider)

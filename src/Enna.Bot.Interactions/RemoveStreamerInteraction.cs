@@ -6,15 +6,10 @@ using MediatR;
 namespace Enna.Bot.Interactions
 {
     public class RemoveStreamerInteraction
-            : InteractionModuleBase<SocketInteractionContext>
+            : TenantBaseInteraction
     {
-        private readonly IMediator _mediator;
-
-        public RemoveStreamerInteraction(IMediator mediator)
+        public RemoveStreamerInteraction(IMediator mediator) : base(mediator)
         {
-            ArgumentNullException.ThrowIfNull(mediator);
-
-            _mediator = mediator;
         }
 
         [SlashCommand(
@@ -42,8 +37,9 @@ namespace Enna.Bot.Interactions
                 return;
             }
 
-            var streamer = await _mediator.Send(
-                new GetStreamerRequest(streamerId));
+            var streamer = 
+                await SendToTenantAsync(
+                    new GetStreamerRequest(streamerId));
 
             if (streamer == null)
             {
@@ -59,7 +55,7 @@ namespace Enna.Bot.Interactions
                 return;
             }
 
-            await _mediator.Send(
+            await SendToTenantAsync(
                 new RemoveStreamerRequest(streamerId));
 
             await FollowupAsync(

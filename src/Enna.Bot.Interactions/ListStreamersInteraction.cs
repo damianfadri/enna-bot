@@ -21,7 +21,7 @@ namespace Enna.Bot.Interactions
             await DeferAsync(true);
 
             var streamers =
-                await SendToTenantAsync<IEnumerable<StreamerDto>>(
+                await SendToTenantAsync(
                     new ListStreamersRequest());
 
             if (!streamers.Any())
