@@ -2,13 +2,17 @@
 using Discord;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
+using Enna.Core.Domain;
 
 namespace Enna.Bot.Interactions
 {
     public class RemoveStreamerInteraction
             : TenantBaseInteraction
     {
-        public RemoveStreamerInteraction(IMediator mediator) : base(mediator)
+        public RemoveStreamerInteraction(
+            IMediator mediator,
+            IUnitOfWork unitOfWork) 
+            : base(mediator, unitOfWork)
         {
         }
 
@@ -66,6 +70,8 @@ namespace Enna.Bot.Interactions
                         $"Successfully removed {streamer.Name}.\r\nId: {streamerId}")
                     .WithColor(Color.Green)
                     .Build());
+
+            await UnitOfWork.CommitAsync();
         }
     }
 }

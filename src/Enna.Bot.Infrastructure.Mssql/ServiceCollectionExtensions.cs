@@ -32,15 +32,13 @@ namespace Enna.Bot.Infrastructure.Mssql
                 {
                     options.UseSqlServer(
                         configuration
-                            .GetConnectionString(DEFAULT_CONNECTION_STRING),
-                        options => options.UseQuerySplittingBehavior(
-                            QuerySplittingBehavior.SplitQuery));
+                            .GetConnectionString(DEFAULT_CONNECTION_STRING));
                 })
                 .AddTransient<IDomainEventDispatcher, DomainEventDispatcher>()
                 .AddTransient<IUnitOfWork, UnitOfWork>()
 
                 .AddScoped<ITenantProvider, TenantProvider>()
-                .AddScoped<IGuildTenantRepository, GuildTenantRepository>()
+                .AddTransient<IGuildTenantRepository, GuildTenantRepository>()
                 .AddTransient<ITenantAssigner, TenantAssigner>();
 
             return services;

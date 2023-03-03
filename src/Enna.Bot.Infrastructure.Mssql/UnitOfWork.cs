@@ -1,10 +1,11 @@
 ﻿using Enna.Core.Domain;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Enna.Bot.Infrastructure.Mssql
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public readonly IDomainEventDispatcher _dispatcher;
+        private readonly IDomainEventDispatcher _dispatcher;
         private readonly ITenantAssigner _assigner;
         private readonly StreamerContext _streamerContext;
         private readonly TenantContext _tenantContext;
@@ -19,6 +20,7 @@ namespace Enna.Bot.Infrastructure.Mssql
             ArgumentNullException.ThrowIfNull(assigner);
             ArgumentNullException.ThrowIfNull(streamerContext);
             ArgumentNullException.ThrowIfNull(tenantContext);
+
             _dispatcher = dispatcher;
             _assigner = assigner;
             _streamerContext = streamerContext;

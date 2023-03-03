@@ -1,28 +1,16 @@
-﻿using Enna.Core.Domain;
-using Enna.Streamers.Application.Handlers;
-using Moq;
+﻿using Enna.Streamers.Application.Handlers;
 
 namespace Enna.Streamers.Application.Tests.Unit
 {
     public class StreamerOfflineEventHandlerSutBuilder
     {
-        private IUnitOfWork _unitOfWork;
-
         public StreamerOfflineEventHandlerSutBuilder()
         {
-            _unitOfWork = new Mock<IUnitOfWork>().Object;
-        }
-
-        public StreamerOfflineEventHandlerSutBuilder WithNullUnitOfWork()
-        {
-            _unitOfWork = null!;
-            return this;
         }
 
         public StreamerOfflineEventHandler Build()
         {
-            return new StreamerOfflineEventHandler(
-                _unitOfWork);
+            return new StreamerOfflineEventHandler();
         }
     }
 }

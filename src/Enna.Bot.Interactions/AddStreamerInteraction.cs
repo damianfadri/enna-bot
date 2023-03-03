@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Enna.Core.Domain;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 
@@ -7,7 +8,10 @@ namespace Enna.Bot.Interactions
 {
     public class AddStreamerInteraction : TenantBaseInteraction
     {
-        public AddStreamerInteraction(IMediator mediator) : base(mediator)
+        public AddStreamerInteraction(
+            IMediator mediator,
+            IUnitOfWork unitOfWork) 
+            : base(mediator, unitOfWork)
         {
         }
 
@@ -39,6 +43,8 @@ namespace Enna.Bot.Interactions
                         $"Successfully added {name}.\r\nId: {streamerId}")
                     .WithColor(Color.Green)
                     .Build());
+
+            await UnitOfWork.CommitAsync();
         }
     }
 }

@@ -8,37 +8,50 @@ namespace Enna.Bot.Interactions
     public class TenantBaseInteraction 
         : InteractionModuleBase<SocketInteractionContext>
     {
-        private readonly IMediator _mediator;
+        protected IMediator Mediator { get; private set; }
+        protected IUnitOfWork UnitOfWork { get; private set; }
 
-        public TenantBaseInteraction(IMediator mediator)
+        protected Guid? TenantId { get; private set; }
+
+        public TenantBaseInteraction(
+            IMediator mediator,
+            IUnitOfWork unitOfWork)
         {
             ArgumentNullException.ThrowIfNull(mediator);
+            ArgumentNullException.ThrowIfNull(unitOfWork);
 
-            _mediator = mediator;
+            Mediator = mediator;
+            UnitOfWork = unitOfWork;
         }
 
         protected async Task SendToTenantAsync(IRequest request)
         {
-            var tenantId = await GetOrCreateTenantId(Context.Guild.Id);
-
+            if (!TenantId.HasValue)
+            {
+                TenantId = await GetOrCreateTenantId(Context.Guild.Id);
+            }
+            
             var wrapper = 
                 new TenantRequest(
-                    tenantId, 
+                    TenantId.Value,
                     request);
 
-            await _mediator.Send(wrapper);
+            await Mediator.Send(wrapper);
         }
 
         protected async Task<TResponse> SendToTenantAsync<TResponse>(IRequest<TResponse> request)
         {
-            var tenantId = await GetOrCreateTenantId(Context.Guild.Id);
+            if (!TenantId.HasValue)
+            {
+                TenantId = await GetOrCreateTenantId(Context.Guild.Id);
+            }
 
             var wrapper =
                 new TenantRequest<TResponse>(
-                    tenantId,
+                    TenantId.Value,
                     request);
 
-            return await _mediator.Send(wrapper);
+            return await Mediator.Send(wrapper);
         }
 
         private async Task<Guid> GetOrCreateTenantId(ulong guildId)
@@ -46,9 +59,8 @@ namespace Enna.Bot.Interactions
             try
             {
                 var tenant =
-                    await _mediator.Send(
-                        new GetGuildTenantByGuildRequest(
-                            Context.Guild.Id));
+                    await Mediator.Send(
+                        new GetGuildTenantByGuildRequest(guildId));
 
                 return tenant.Id;
             }
@@ -56,10 +68,8 @@ namespace Enna.Bot.Interactions
             {
                 var tenantId = Guid.NewGuid();
 
-                await _mediator.Send(
-                    new AddGuildTenantRequest(
-                        tenantId,
-                        Context.Guild.Id));
+                await Mediator.Send(
+                    new AddGuildTenantRequest(tenantId, guildId));
 
                 return tenantId;
             }

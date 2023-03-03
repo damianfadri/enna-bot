@@ -1,26 +1,11 @@
 ﻿using Enna.Streamers.Domain;
 using Enna.Streamers.Domain.Events;
-using FluentAssertions;
 using Xunit;
 
 namespace Enna.Streamers.Application.Tests.Unit
 {
     public class StreamerOfflineEventHandlerTests
     {
-        public class Constructor_Should
-        {
-            [Fact]
-            public void ThrowException_When_UnitOfWorkIsNull()
-            {
-                var sut = () =>
-                    new StreamerOfflineEventHandlerSutBuilder()
-                        .WithNullUnitOfWork()
-                        .Build();
-
-                sut.Should().Throw<ArgumentNullException>();
-            }
-        }
-
         public class Handle_Should 
         {
             [Fact]

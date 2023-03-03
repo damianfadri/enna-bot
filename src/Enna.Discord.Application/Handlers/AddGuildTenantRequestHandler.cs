@@ -10,16 +10,13 @@ namespace Enna.Discord.Application.Handlers
         : IRequestHandler<AddGuildTenantRequest>
     {
         private readonly IGuildTenantRepository _tenantRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public AddGuildTenantRequestHandler(
-            IGuildTenantRepository tenantRepository,
-            IUnitOfWork unitOfWork)
+            IGuildTenantRepository tenantRepository)
         {
             ArgumentNullException.ThrowIfNull(tenantRepository);
 
             _tenantRepository = tenantRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(
@@ -31,7 +28,6 @@ namespace Enna.Discord.Application.Handlers
                 request.GuildId);
 
             await _tenantRepository.Add(tenant);
-            await _unitOfWork.CommitAsync();
         }
     }
 }

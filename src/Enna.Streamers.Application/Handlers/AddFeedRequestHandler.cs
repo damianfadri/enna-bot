@@ -9,20 +9,16 @@ namespace Enna.Streamers.Application.Handlers
     {
         private readonly IStreamerRepository _streamerRepository;
         private readonly IFeedRepository _feedRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public AddFeedRequestHandler(
             IStreamerRepository streamerRepository,
-            IFeedRepository feedRepository,
-            IUnitOfWork unitOfWork)
+            IFeedRepository feedRepository)
         {
             ArgumentNullException.ThrowIfNull(streamerRepository);
             ArgumentNullException.ThrowIfNull(feedRepository);
-            ArgumentNullException.ThrowIfNull(unitOfWork);
 
             _streamerRepository = streamerRepository;
             _feedRepository = feedRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(
@@ -51,7 +47,6 @@ namespace Enna.Streamers.Application.Handlers
             streamer.Feeds.Add(feed);
 
             await _feedRepository.Add(feed);
-            await _unitOfWork.CommitAsync();
         }
     }
 }
