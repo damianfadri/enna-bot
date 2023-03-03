@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Streamers.Application.Contracts;
 using Enna.Streamers.Domain;
 using MediatR;
@@ -10,20 +10,16 @@ namespace Enna.Streamers.Application.Handlers
     {
         private readonly IStreamerRepository _streamerRepository;
         private readonly IChannelRepository _channelRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public AddStreamerRequestHandler(
             IStreamerRepository streamerRepository,
-            IChannelRepository channelRepository,
-            IUnitOfWork unitOfWork)
+            IChannelRepository channelRepository)
         {
             ArgumentNullException.ThrowIfNull(streamerRepository);
             ArgumentNullException.ThrowIfNull(channelRepository);
-            ArgumentNullException.ThrowIfNull(unitOfWork);
 
             _streamerRepository = streamerRepository;
             _channelRepository = channelRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(
@@ -37,8 +33,6 @@ namespace Enna.Streamers.Application.Handlers
 
             await _streamerRepository.Add(streamer);
             await _channelRepository.Add(channel);
-
-            await _unitOfWork.CommitAsync();
         }
     }
 }

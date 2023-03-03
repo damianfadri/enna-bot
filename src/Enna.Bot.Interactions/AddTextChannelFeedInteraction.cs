@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Enna.Core.Domain;
 using Enna.Discord.Application.Contracts;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
@@ -7,19 +8,17 @@ using MediatR;
 namespace Enna.Bot.Interactions
 {
     public class AddTextChannelFeedInteraction
-        : InteractionModuleBase<SocketInteractionContext>
+        : TenantBaseInteraction
     {
-        private readonly IMediator _mediator;
-
-        public AddTextChannelFeedInteraction(IMediator mediator)
+        public AddTextChannelFeedInteraction(
+            IMediator mediator,
+            IUnitOfWork unitOfWork) 
+            : base(mediator, unitOfWork)
         {
-            ArgumentNullException.ThrowIfNull(mediator);
-
-            _mediator = mediator;
         }
 
         [SlashCommand(
-            name: "add-feed-discord",
+            name: "add-feed",
             description: "Adds a text channel notifier for a streamer.")]
         public async Task ExecuteInteractionAsync(
             [Summary(
@@ -47,8 +46,9 @@ namespace Enna.Bot.Interactions
                 return;
             }
 
-            var streamer = await _mediator.Send(
-                new GetStreamerRequest(streamerId));
+            var streamer = 
+                await SendToTenantAsync(
+                    new GetStreamerRequest(streamerId));
 
             if (streamer == null)
             {
@@ -68,7 +68,7 @@ namespace Enna.Bot.Interactions
 
             try
             {
-                await _mediator.Send(
+                await SendToTenantAsync(
                     new AddFeedRequest(feedId, streamerId, "discord"));
             }
             catch (Exception ex)
@@ -82,7 +82,7 @@ namespace Enna.Bot.Interactions
                        .Build());
             }
 
-            await _mediator.Send(
+            await SendToTenantAsync(
                 new AddTextChannelFeedRequest(
                     feedId, channel.GuildId, channel.Id));
 
@@ -94,6 +94,8 @@ namespace Enna.Bot.Interactions
                         $"Successfully added feed for streamer {streamer.Name}.\r\nId: {feedId}")
                     .WithColor(Color.Green)
                     .Build());
+
+            await UnitOfWork.CommitAsync();
         }
     }
 }

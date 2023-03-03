@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using MediatR;
 
 namespace Enna.Bot.Infrastructure.Mssql

@@ -19,17 +19,6 @@ namespace Enna.Streamers.Application.Tests.Unit
 
                 sut.Should().Throw<ArgumentNullException>();
             }
-
-            [Fact]
-            public void ThrowException_When_UnitOfWorkIsNull()
-            {
-                var sut = () =>
-                    new RemoveStreamerRequestHandlerSutBuilder()
-                        .WithNullUnitOfWork()
-                        .Build();
-
-                sut.Should().Throw<ArgumentNullException>();
-            }
         }
 
         public class Handle_Should

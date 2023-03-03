@@ -1,5 +1,4 @@
-﻿using Enna.Bot.SeedWork;
-using Enna.Streamers.Domain.Events;
+﻿using Enna.Streamers.Domain.Events;
 using MediatR;
 
 namespace Enna.Streamers.Application.Handlers
@@ -7,13 +6,8 @@ namespace Enna.Streamers.Application.Handlers
     public class StreamerLiveEventHandler 
         : INotificationHandler<StreamerLiveEvent>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public StreamerLiveEventHandler(IUnitOfWork unitOfWork)
+        public StreamerLiveEventHandler()
         {
-            ArgumentNullException.ThrowIfNull(unitOfWork);
-
-            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(
@@ -25,7 +19,7 @@ namespace Enna.Streamers.Application.Handlers
                 feed.Notify(notification.Channel);
             }
 
-            await _unitOfWork.CommitAsync();
+            await Task.CompletedTask;
         }
     }
 }

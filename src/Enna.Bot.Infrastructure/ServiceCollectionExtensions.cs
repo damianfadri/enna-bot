@@ -8,10 +8,10 @@ namespace Enna.Bot.Infrastructure
         public static IServiceCollection AddStreamerInfrastructureServices(
             this IServiceCollection services)
         {
-            services
-                .AddTransient<ILinkFetcher, YoutubeLivestreamFetcher>();
+            //services
+            //    .AddTransient<ILinkFetcher, YoutubeLivestreamFetcher>();
 
-            services.AddHttpClient<YoutubeLivestreamFetcher>();
+            //services.AddHttpClient<YoutubeLivestreamFetcher>();
 
             return services;
         }

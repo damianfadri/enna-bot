@@ -1,8 +1,8 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 
 namespace Enna.Discord.Domain
 {
-    public class TextChannelFeed : Entity
+    public class TextChannelFeed : TenantEntity
     {
         public ulong Guild { get; init; }
         public ulong Channel { get; init; }

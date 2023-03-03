@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Streamers.Application.Workers;
 using Enna.Streamers.Domain;
 using Moq;

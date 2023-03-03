@@ -1,9 +1,9 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Streamers.Domain.Events;
 
 namespace Enna.Streamers.Domain
 {
-    public class Feed : Entity
+    public class Feed : TenantEntity
     {
         public FeedType Type { get; init; }
         public DateTime LastNotifiedUtc { get; private set; }

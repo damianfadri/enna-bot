@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Enna.Bot.SeedWork
+namespace Enna.Core.Domain
 {
     public interface IDomainEvent : INotification
     {

@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Streamers.Application.Contracts;
 using Enna.Streamers.Domain;
 using MediatR;
@@ -9,17 +9,13 @@ namespace Enna.Streamers.Application.Handlers
         : IRequestHandler<RemoveStreamerRequest>
     {
         private readonly IStreamerRepository _streamerRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public RemoveStreamerRequestHandler(
-            IStreamerRepository streamerRepository,
-            IUnitOfWork unitOfWork) 
+            IStreamerRepository streamerRepository) 
         {
             ArgumentNullException.ThrowIfNull(streamerRepository);
-            ArgumentNullException.ThrowIfNull(unitOfWork);
 
             _streamerRepository = streamerRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(
@@ -36,7 +32,6 @@ namespace Enna.Streamers.Application.Handlers
             }
 
             await _streamerRepository.Remove(streamer);
-            await _unitOfWork.CommitAsync();
         }
     }
 }

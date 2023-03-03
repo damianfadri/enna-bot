@@ -1,4 +1,4 @@
-﻿using Enna.Bot.SeedWork;
+﻿using Enna.Core.Domain;
 using Enna.Streamers.Application.Handlers;
 using Enna.Streamers.Domain;
 using Moq;
@@ -9,13 +9,11 @@ namespace Enna.Streamers.Application.Tests.Unit
     {
         private IStreamerRepository _streamerRepository;
         private IChannelRepository _channelRepository;
-        private IUnitOfWork _unitOfWork;
 
         public AddStreamerRequestHandlerSutBuilder() 
         {
             _streamerRepository = new Mock<IStreamerRepository>().Object;
             _channelRepository= new Mock<IChannelRepository>().Object;
-            _unitOfWork = new Mock<IUnitOfWork>().Object;
         }
 
         public AddStreamerRequestHandlerSutBuilder WithNullStreamerRepository()
@@ -30,18 +28,11 @@ namespace Enna.Streamers.Application.Tests.Unit
             return this;
         }
 
-        public AddStreamerRequestHandlerSutBuilder WithNullUnitOfWork()
-        {
-            _unitOfWork = null!;
-            return this;
-        }
-
         public AddStreamerRequestHandler Build()
         {
             return new AddStreamerRequestHandler(
                 _streamerRepository,
-                _channelRepository,
-                _unitOfWork);
+                _channelRepository);
         }
     }
 }

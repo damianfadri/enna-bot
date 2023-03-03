@@ -1,4 +1,4 @@
-﻿namespace Enna.Bot.SeedWork
+﻿namespace Enna.Core.Domain
 {
     public interface IRepository<T> where T : Entity
     {

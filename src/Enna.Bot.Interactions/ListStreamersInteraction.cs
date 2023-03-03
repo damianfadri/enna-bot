@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Enna.Core.Domain;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 using System.Text;
@@ -7,15 +8,13 @@ using System.Text;
 namespace Enna.Bot.Interactions
 {
     public class ListStreamersInteraction
-        : InteractionModuleBase<SocketInteractionContext>
+        : TenantBaseInteraction
     {
-        private readonly IMediator _mediator;
-
-        public ListStreamersInteraction(IMediator mediator)
+        public ListStreamersInteraction(
+            IMediator mediator,
+            IUnitOfWork unitOfWork) 
+            : base(mediator, unitOfWork)
         {
-            ArgumentNullException.ThrowIfNull(mediator);
-
-            _mediator = mediator;
         }
 
         [SlashCommand(
@@ -25,8 +24,9 @@ namespace Enna.Bot.Interactions
         {
             await DeferAsync(true);
 
-            var streamers = await _mediator.Send(
-                new ListStreamersRequest());
+            var streamers =
+                await SendToTenantAsync(
+                    new ListStreamersRequest());
 
             if (!streamers.Any())
             {
