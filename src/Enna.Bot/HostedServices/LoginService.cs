@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace Enna.Bot
+namespace Enna.Bot.HostedServices
 {
     public class LoginService : IHostedService
     {
@@ -11,7 +11,7 @@ namespace Enna.Bot
         private readonly BotOptions _botOptions;
 
         public LoginService(
-            DiscordSocketClient client, 
+            DiscordSocketClient client,
             IOptions<BotOptions> botOptions)
         {
             ArgumentNullException.ThrowIfNull(client);

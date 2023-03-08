@@ -17,5 +17,19 @@ namespace Enna.Streamers.Domain
 
             AddEvent(new StreamerCreatedEvent(this));
         }
+
+        public void GoLive(Channel channel, string streamLink)
+        {
+            channel.GoLive(streamLink);
+            foreach (var feed in Feeds)
+            {
+                feed.Notify(channel);
+            }
+        }
+
+        public void GoOffline(Channel channel)
+        {
+            channel.GoOffline();
+        }
     }
 }

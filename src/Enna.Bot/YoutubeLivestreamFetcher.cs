@@ -1,7 +1,6 @@
-﻿using Enna.Streamers.Domain;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace Enna.Bot.Infrastructure
+namespace Enna.Bot
 {
     public class YoutubeLivestreamFetcher : ILinkFetcher
     {
@@ -21,14 +20,14 @@ namespace Enna.Bot.Infrastructure
             _httpClient = httpClient;
         }
 
-        public bool CanFetch(Channel channel)
+        public bool CanFetch(string channelLink)
         {
-            if (string.IsNullOrEmpty(channel.Link))
+            if (string.IsNullOrEmpty(channelLink))
             {
                 return false;
             }
 
-            var matchResult = Regex.Match(channel.Link, YT_CHANNEL_LINK_REGEX);
+            var matchResult = Regex.Match(channelLink, YT_CHANNEL_LINK_REGEX);
             if (!matchResult.Success)
             {
                 return false;
@@ -37,9 +36,9 @@ namespace Enna.Bot.Infrastructure
             return true;
         }
 
-        public async Task<string?> Fetch(Channel channel)
+        public async Task<string?> Fetch(string channelLink)
         {
-            var streamLink = $"{channel.Link}/live";
+            var streamLink = $"{channelLink}/live";
 
             var httpResponse = await _httpClient.GetAsync(streamLink);
             if (!httpResponse.IsSuccessStatusCode)

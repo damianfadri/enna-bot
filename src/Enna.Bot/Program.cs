@@ -1,8 +1,10 @@
 ﻿using Discord.WebSocket;
 using Enna.Bot;
+using Enna.Bot.HostedServices;
 using Enna.Bot.Infrastructure;
 using Enna.Bot.Infrastructure.Mssql;
 using Enna.Bot.Interactions;
+using Enna.Bot.Workers;
 using Enna.Core.Application;
 using Enna.Discord.Application;
 using Enna.Streamers.Application;
@@ -32,10 +34,20 @@ public class Program
                     .Bind(configuration.GetSection(nameof(BotOptions)));
 
                 services
+                    .AddOptions<WorkerOptions>()
+                    .Bind(configuration.GetSection(nameof(WorkerOptions)));
+
+                services
                     .AddHostedService<LoginService>()
                     .AddHostedService<LogService>()
                     .AddHostedService<CommandService>()
+                    .AddHostedService<WorkerService>()
                     .AddSingleton<DiscordSocketClient>();
+
+                services
+                    .AddTransient<IWorker, FindLiveStreamersWorker>()
+                    .AddTransient<ILinkFetcher, YoutubeLivestreamFetcher>()
+                    .AddHttpClient<YoutubeLivestreamFetcher>();
 
                 services
                     .AddMediatR(config =>

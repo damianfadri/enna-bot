@@ -38,11 +38,10 @@ namespace Enna.Bot.Infrastructure.Mssql
                 entity.ClearEvents();
             }
 
-            var tasks
-                = pendingEvents
-                    .Select(async (pendingEvent) => await _mediator.Publish(pendingEvent));
-
-            await Task.WhenAll(tasks);
+            foreach (var pendingEvent in pendingEvents)
+            {
+                await _mediator.Publish(pendingEvent);
+            }
         }
     }
 }

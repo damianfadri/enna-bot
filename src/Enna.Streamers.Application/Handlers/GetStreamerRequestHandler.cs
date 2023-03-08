@@ -30,12 +30,23 @@ namespace Enna.Streamers.Application.Handlers
                     $"Streamer id {request.StreamerId} does not exist.");
             }
 
-            return new StreamerDto(
-                streamer.Id,
-                streamer.Name,
-                streamer.Channels
-                    .Select(channel => channel.Link)
-                    .ToList());
+            return 
+                new StreamerDto(
+                    streamer.Id,
+                    streamer.Name,
+                    streamer.Channels
+                        .Select(channel =>
+                            new ChannelDto(
+                                channel.Id,
+                                channel.Link,
+                                channel.StreamLink))
+                        .ToList(),
+                    streamer.Feeds
+                        .Select(feed =>
+                            new FeedDto(
+                                feed.Id,
+                                feed.Type.ToString()))
+                        .ToList());
         }
     }
 }
