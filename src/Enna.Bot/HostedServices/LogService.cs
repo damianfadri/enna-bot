@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Enna.Bot
+namespace Enna.Bot.HostedServices
 {
     public class LogService : IHostedService
     {
@@ -11,7 +11,7 @@ namespace Enna.Bot
         private readonly ILogger<LogService> _logger;
 
         public LogService(
-            DiscordSocketClient client, 
+            DiscordSocketClient client,
             ILogger<LogService> logger)
         {
             ArgumentNullException.ThrowIfNull(client);

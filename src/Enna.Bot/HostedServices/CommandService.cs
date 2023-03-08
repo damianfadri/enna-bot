@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Enna.Bot
+namespace Enna.Bot.HostedServices
 {
     public class CommandService : IHostedService
     {
@@ -56,8 +56,6 @@ namespace Enna.Bot
             {
                 return;
             }
-
-            using var scope = _provider.CreateScope();
 
             var context = new SocketInteractionContext(_client, arg);
             await _interaction.ExecuteCommandAsync(context, _provider);

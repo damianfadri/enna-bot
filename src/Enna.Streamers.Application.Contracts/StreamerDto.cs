@@ -3,5 +3,6 @@
     public record StreamerDto(
         Guid Id,
         string Name,
-        List<string> ChannelLinks);
+        List<ChannelDto> Channels,
+        List<FeedDto> Feeds);
 }

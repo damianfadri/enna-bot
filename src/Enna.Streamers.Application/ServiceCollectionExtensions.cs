@@ -1,6 +1,4 @@
-﻿using Enna.Streamers.Application.Contracts;
-using Enna.Streamers.Application.Workers;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Enna.Streamers.Application
@@ -11,14 +9,6 @@ namespace Enna.Streamers.Application
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            services
-                .AddOptions<WorkerOptions>()
-                .Bind(configuration.GetSection(nameof(WorkerOptions)));
-
-            services
-                .AddTransient<IWorker, FindLiveStreamersWorker>();
-                // .AddHostedService<WorkerService>();
-
             return services;
         }
     }

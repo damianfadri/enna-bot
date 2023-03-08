@@ -1,4 +1,4 @@
-﻿namespace Enna.Streamers.Application.Contracts
+﻿namespace Enna.Bot
 {
     public class WorkerOptions
     {
