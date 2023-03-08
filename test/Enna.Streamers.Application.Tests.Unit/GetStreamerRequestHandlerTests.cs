@@ -71,8 +71,8 @@ namespace Enna.Streamers.Application.Tests.Unit
 
                 dto.Id.Should().Be(streamer.Id);
                 dto.Name.Should().Be(streamer.Name);
-                dto.ChannelLinks.Should().Contain("https://youtube.com/channel-link");
-                dto.ChannelLinks.Should().Contain("https://twitch.tv/channel-link2");
+                dto.Channels.Should().Contain(channel => channel.Link == "https://youtube.com/channel-link");
+                dto.Channels.Should().Contain(channel => channel.Link == "https://twitch.tv/channel-link2");
             }
         }
     }

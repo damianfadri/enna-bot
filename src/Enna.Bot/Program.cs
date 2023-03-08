@@ -57,7 +57,6 @@ public class Program
                     .AddInteractions()
                     .AddCoreApplicationServices()
                     .AddTextChannelFeedServices()
-                    .AddStreamerInfrastructureServices()
                     .AddStreamerApplicationServices(configuration)
                     .AddDatabaseServices(configuration);
             })
