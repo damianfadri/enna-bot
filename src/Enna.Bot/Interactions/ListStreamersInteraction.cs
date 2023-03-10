@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Enna.Core.Domain;
+using Enna.Discord.Application.Contracts;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 using System.Text;
@@ -47,12 +48,12 @@ namespace Enna.Bot.Interactions
                 embed: new EmbedBuilder()
                     .WithTitle("Streamer List")
                     .WithDescription(
-                        BuildStreamerListMessage(streamers))
+                        await BuildStreamerListMessage(streamers))
                     .WithColor(Color.Purple)
                     .Build());
         }
 
-        private string BuildStreamerListMessage(
+        private async Task<string> BuildStreamerListMessage(
             IEnumerable<StreamerDto> streamers)
         {
             var builder = new StringBuilder();
@@ -73,7 +74,17 @@ namespace Enna.Bot.Interactions
                 foreach (var feed in streamer.Feeds)
                 {
                     builder.AppendLine(feed.MessageTemplate ?? "@link");
+                    if (feed.Type == "Discord")
+                    {
+                        var textChannel =
+                            await SendToTenantAsync(
+                                new GetTextChannelFeedRequest(feed.Id));
+
+                        builder.AppendLine($"<@{textChannel.ChannelId}>");
+                    }
                 }
+
+                builder.AppendLine();
             }
 
             return builder.ToString();

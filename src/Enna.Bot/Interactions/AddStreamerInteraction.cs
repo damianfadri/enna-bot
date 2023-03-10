@@ -45,11 +45,6 @@ namespace Enna.Bot.Interactions
                 new AddStreamerRequest(streamerId, name, link));
 
             var feedId = Guid.NewGuid();
-            
-            if (string.IsNullOrWhiteSpace(template))
-            {
-                template = "@link";
-            }
 
             try
             {
