@@ -45,7 +45,8 @@ namespace Enna.Streamers.Application.Handlers
                         .Select(feed =>
                             new FeedDto(
                                 feed.Id,
-                                feed.Type.ToString()))
+                                feed.Type.ToString(),
+                                feed.MessageTemplate))
                         .ToList());
         }
     }

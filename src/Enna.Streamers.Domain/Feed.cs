@@ -8,6 +8,7 @@ namespace Enna.Streamers.Domain
         public FeedType Type { get; init; }
         public string? MessageTemplate { get; init; }
         public DateTime LastNotifiedUtc { get; private set; }
+
         #region Navigation Properties
 #pragma warning disable
         public Streamer Streamer { get; init; }

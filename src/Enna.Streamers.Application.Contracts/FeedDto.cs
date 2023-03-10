@@ -2,5 +2,6 @@
 {
     public record FeedDto(
         Guid Id, 
-        string Type);
+        string Type,
+        string? MessageTemplate);
 }

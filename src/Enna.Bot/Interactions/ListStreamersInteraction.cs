@@ -60,14 +60,20 @@ namespace Enna.Bot.Interactions
             foreach (var streamer in streamers)
             {
                 builder.AppendLine(streamer.Name);
+                builder.AppendLine(streamer.Id.ToString());
+                builder.AppendLine();
 
+                builder.AppendLine("Channels:");
                 foreach (var channel in streamer.Channels)
                 {
                     builder.AppendLine(channel.Link);
                 }
 
-                builder.AppendLine($"Id: {streamer.Id}");
-                builder.AppendLine();
+                builder.AppendLine($"Feeds: ");
+                foreach (var feed in streamer.Feeds)
+                {
+                    builder.AppendLine(feed.MessageTemplate ?? "@link");
+                }
             }
 
             return builder.ToString();

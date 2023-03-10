@@ -42,14 +42,6 @@ namespace Enna.Streamers.Application.Handlers
                     $"Feed type '{request.FeedType}' is unrecognized.");
             }
 
-
-            if (string.IsNullOrWhiteSpace(request.MessageTemplate)
-                || !request.MessageTemplate.Contains("@link"))
-            {
-                throw new InvalidOperationException(
-                    $"Template message should contain an @link.");
-            }
-
             var feed = new Feed(
                 request.Id, 
                 feedType, 
