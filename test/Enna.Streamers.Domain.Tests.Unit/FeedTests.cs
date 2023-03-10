@@ -14,7 +14,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 var id = Guid.NewGuid();
                 var type = FeedType.Console;
 
-                var feed = new Feed(id, FeedType.Console);
+                var feed = new Feed(id, FeedType.Console, "@link");
 
                 Assert.Equal(id, feed.Id);
                 Assert.Equal(type, feed.Type);
@@ -23,7 +23,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void BroadcastFeedCreatedEvent()
             {
-                var feed = new Feed(Guid.NewGuid(), FeedType.Console);
+                var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
 
                 var @event = feed.GetEvents().Last();
 
@@ -40,7 +40,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 var channel = new Channel(Guid.NewGuid(), "https://youtube.com/some-channel");
                 channel.GoLive("https://youtube.com/live-link");
 
-                var feed = new Feed(Guid.NewGuid(), FeedType.Console);
+                var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
                 var oldLastNotifiedutc = feed.LastNotifiedUtc;
 
                 feed.Notify(channel);
@@ -54,7 +54,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 var channel = new Channel(Guid.NewGuid(), "https://youtube.com/some-channel");
                 channel.GoLive("https://youtube.com/live-link");
 
-                var feed = new Feed(Guid.NewGuid(), FeedType.Console);
+                var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
                 var oldLastNotifiedutc = feed.LastNotifiedUtc;
 
                 feed.Notify(channel);
@@ -72,7 +72,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 var channel = new Channel(Guid.NewGuid(), "https://youtube.com/some-channel");
                 channel.GoLive("https://youtube.com/live-link");
 
-                var feed = new Feed(Guid.NewGuid(), FeedType.Console);
+                var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
 
                 feed.Notify(channel);
                 feed.ClearEvents();

@@ -44,8 +44,8 @@ namespace Enna.Streamers.Application.Tests.Unit
             [Fact]
             public async void ReturnList_When_StreamerRepositoryIsPopulated()
             {
-                var feed1 = new Feed(Guid.NewGuid(), FeedType.Console);
-                var feed2 = new Feed(Guid.NewGuid(), FeedType.Discord);
+                var feed1 = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
+                var feed2 = new Feed(Guid.NewGuid(), FeedType.Discord, "@link");
 
                 var streamerId = Guid.NewGuid();
 
@@ -76,7 +76,8 @@ namespace Enna.Streamers.Application.Tests.Unit
                     feeds.Add(
                         new Feed(
                             Guid.NewGuid(),
-                            FeedType.Console));
+                            FeedType.Console, 
+                            "@link"));
                 }
 
                 var streamerId = Guid.NewGuid();

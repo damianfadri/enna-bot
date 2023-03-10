@@ -28,7 +28,8 @@ namespace Enna.Discord.Application.Tests.Unit
             {
                 var feed = new Feed(
                     Guid.NewGuid(),
-                    FeedType.Discord);
+                    FeedType.Discord, 
+                    "@link");
 
                 var handler =
                     new AddTextChannelFeedRequestHandlerSutBuilder()

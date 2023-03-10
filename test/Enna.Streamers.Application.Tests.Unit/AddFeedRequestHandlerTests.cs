@@ -79,6 +79,53 @@ namespace Enna.Streamers.Application.Tests.Unit
             }
 
             [Fact]
+            public async Task ThrowException_When_TemplateIsNullOrEmpty()
+            {
+                var streamer = new Streamer(
+                    Guid.NewGuid(),
+                    "Streamer name");
+
+                var handler
+                    = new AddFeedRequestHandlerSutBuilder()
+                        .WithExistingStreamer(streamer)
+                        .Build();
+
+                var sut = () =>
+                    handler.Handle(
+                        new AddFeedRequest(
+                            Guid.NewGuid(),
+                            streamer.Id,
+                            "consul"),
+                        CancellationToken.None);
+
+                await sut.Should().ThrowAsync<InvalidOperationException>();
+            }
+
+            [Fact]
+            public async Task ThrowException_When_TemplateDoesNotContainLink()
+            {
+                var streamer = new Streamer(
+                    Guid.NewGuid(),
+                    "Streamer name");
+
+                var handler
+                    = new AddFeedRequestHandlerSutBuilder()
+                        .WithExistingStreamer(streamer)
+                        .Build();
+
+                var sut = () =>
+                    handler.Handle(
+                        new AddFeedRequest(
+                            Guid.NewGuid(),
+                            streamer.Id,
+                            "consul",
+                            "message-template"),
+                        CancellationToken.None);
+
+                await sut.Should().ThrowAsync<InvalidOperationException>();
+            }
+
+            [Fact]
             public async Task AddFeedToStreamer()
             {
                 var streamer = new Streamer(
@@ -95,7 +142,8 @@ namespace Enna.Streamers.Application.Tests.Unit
                     new AddFeedRequest(
                         feedId,
                         streamer.Id,
-                        "console"),
+                        "console",
+                        "@link"),
                     CancellationToken.None);
 
                 streamer.Feeds.Should().NotBeEmpty();
@@ -119,7 +167,8 @@ namespace Enna.Streamers.Application.Tests.Unit
                     new AddFeedRequest(
                         feedId,
                         streamer.Id,
-                        "console"),
+                        "console",
+                        "@link"),
                     CancellationToken.None);
             }
         }

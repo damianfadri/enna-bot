@@ -13,16 +13,20 @@ namespace Enna.Discord.Application.Handlers
         private const string DEFAULT_TEMPLATE = "@link";
 
         private readonly DiscordSocketClient _client;
+        private readonly IFeedRepository _feedRepository;
         private readonly ITextChannelFeedRepository _textChannelRepository;
 
         public TextChannelFeedNotifiedEventHandler(
             DiscordSocketClient client,
+            IFeedRepository feedRepository,
             ITextChannelFeedRepository textChannelRepository)
         {
             ArgumentNullException.ThrowIfNull(client);
+            ArgumentNullException.ThrowIfNull(feedRepository);
             ArgumentNullException.ThrowIfNull(textChannelRepository);
 
             _client = client;
+            _feedRepository = feedRepository;
             _textChannelRepository = textChannelRepository;
         }
 
@@ -33,6 +37,13 @@ namespace Enna.Discord.Application.Handlers
             if (notification.Feed.Type != FeedType.Discord)
             {
                 return;
+            }
+
+            var feed = await _feedRepository.FindById(notification.Feed.Id);
+            if (feed == null)
+            {
+                throw new InvalidOperationException(
+                    $"Feed id {notification.Feed.Id} does not exist.");
             }
 
             var details = await _textChannelRepository
@@ -61,7 +72,7 @@ namespace Enna.Discord.Application.Handlers
             var formatter = new StringFormatter();
             formatter.Add("@link", notification.Channel.StreamLink);
 
-            var template = details.Template ?? DEFAULT_TEMPLATE;
+            var template = feed.MessageTemplate ?? DEFAULT_TEMPLATE;
             await channel.SendMessageAsync(formatter.Format(template));
         }
     }

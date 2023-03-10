@@ -26,6 +26,17 @@ namespace Enna.Discord.Application.Tests.Unit
             {
                 var sut = () =>
                     new TextChannelFeedNotifiedEventHandlerSutBuilder()
+                        .WithNullFeedRepository()
+                        .Build();
+
+                sut.Should().Throw<ArgumentNullException>();
+            }
+
+            [Fact]
+            public void ThrowException_When_TextChannelRepositoryIsNull()
+            {
+                var sut = () =>
+                    new TextChannelFeedNotifiedEventHandlerSutBuilder()
                         .WithNullTextChannelRepository()
                         .Build();
 
@@ -42,7 +53,7 @@ namespace Enna.Discord.Application.Tests.Unit
                     new TextChannelFeedNotifiedEventHandlerSutBuilder()
                         .Build();
 
-                var feed = new Feed(Guid.NewGuid(), FeedType.Console);
+                var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
                 var channel = new Channel(
                     Guid.NewGuid(),
                     "https://youtube.com/channel-link");
@@ -66,7 +77,34 @@ namespace Enna.Discord.Application.Tests.Unit
                         .WithMissingFeed(feedId)
                         .Build();
 
-                var feed = new Feed(feedId, FeedType.Discord);
+                var feed = new Feed(feedId, FeedType.Discord, "@link");
+                var channel = new Channel(
+                    Guid.NewGuid(),
+                    "https://youtube.com/channel-link");
+
+                channel.GoLive("https://youtube.com/stream-link");
+
+                var sut = () =>
+                    handler.Handle(
+                        new FeedNotifiedEvent(
+                            feed,
+                            channel),
+                        CancellationToken.None);
+
+                await sut.Should().ThrowAsync<InvalidOperationException>();
+            }
+
+            [Fact]
+            public async Task ThrowException_When_TextChannelIsNotFound()
+            {
+                var feedId = Guid.NewGuid();
+
+                var handler =
+                    new TextChannelFeedNotifiedEventHandlerSutBuilder()
+                        .WithMissingTextChannelDetails(feedId)
+                        .Build();
+
+                var feed = new Feed(feedId, FeedType.Discord, "@link");
                 var channel = new Channel(
                     Guid.NewGuid(),
                     "https://youtube.com/channel-link");
@@ -92,13 +130,16 @@ namespace Enna.Discord.Application.Tests.Unit
                         1L,
                         1L);
 
+                var feed = new Feed(
+                    textChannelFeed.Id, 
+                    FeedType.Discord);
+
                 var handler =
                     new TextChannelFeedNotifiedEventHandlerSutBuilder()
-                        .WithExistingFeed(textChannelFeed)
+                        .WithExistingFeed(feed, textChannelFeed)
                         .WithMissingGuild(textChannelFeed.Guild)
                         .Build();
 
-                var feed = new Feed(textChannelFeed.Id, FeedType.Discord);
                 var channel = new Channel(
                     Guid.NewGuid(),
                     "https://youtube.com/channel-link");
