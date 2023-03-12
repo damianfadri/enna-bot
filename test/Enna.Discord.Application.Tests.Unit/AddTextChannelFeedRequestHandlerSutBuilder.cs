@@ -8,10 +8,12 @@ namespace Enna.Discord.Application.Tests.Unit
 {
     public class AddTextChannelFeedRequestHandlerSutBuilder
     {
+        private IFeedRepository _feedRepository;
         private ITextChannelFeedRepository _textChannelRepository;
 
         public AddTextChannelFeedRequestHandlerSutBuilder()
         {
+            _feedRepository = new Mock<IFeedRepository>().Object;
             _textChannelRepository = new Mock<ITextChannelFeedRepository>().Object;
         }
 
@@ -23,7 +25,9 @@ namespace Enna.Discord.Application.Tests.Unit
 
         public AddTextChannelFeedRequestHandler Build()
         {
-            return new AddTextChannelFeedRequestHandler(_textChannelRepository);
+            return new AddTextChannelFeedRequestHandler(
+                _feedRepository,
+                _textChannelRepository);
         }
     }
 }

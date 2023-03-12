@@ -1,5 +1,6 @@
 ﻿using Enna.Core.Domain;
 using Enna.Streamers.Application.Contracts;
+using Enna.Streamers.Domain;
 using MediatR;
 
 namespace Enna.Bot.Workers

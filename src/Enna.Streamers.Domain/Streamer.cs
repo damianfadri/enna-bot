@@ -6,30 +6,34 @@ namespace Enna.Streamers.Domain
     public class Streamer : TenantEntity
     {
         public string Name { get; init; }
-        public List<Channel> Channels { get; set; }
-        public List<Feed> Feeds { get; set; }
+        public Channel Channel { get; set; }
+        public Feed Feed { get; set; }
 
-        public Streamer(Guid id, string name) : base(id)
+        public bool IsLive => Channel.IsLive;
+        public string? StreamLink => Channel.StreamLink;
+
+        public Streamer(Guid id, string name) : this(id, name, Channel.Default, Feed.Default)
+        {
+        }
+
+        public Streamer(Guid id, string name, Channel channel, Feed feed) : base(id)
         {
             Name = name;
-            Channels = new();
-            Feeds = new();
+            Channel = channel;
+            Feed = feed;
 
             AddEvent(new StreamerCreatedEvent(this));
         }
 
-        public void GoLive(Channel channel, string streamLink)
+        public void GoLive(string streamLink)
         {
-            channel.GoLive(streamLink);
-            foreach (var feed in Feeds)
-            {
-                feed.Notify(channel);
-            }
+            Channel.GoLive(streamLink);
+            Feed.Notify(Channel);
         }
 
-        public void GoOffline(Channel channel)
+        public void GoOffline()
         {
-            channel.GoOffline();
+            Channel.GoOffline();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Enna.Streamers.Domain;
+using System.Text.RegularExpressions;
 
 namespace Enna.Bot
 {

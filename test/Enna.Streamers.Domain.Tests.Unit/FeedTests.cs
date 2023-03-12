@@ -1,5 +1,5 @@
-using Enna.Streamers.Domain;
 using Enna.Streamers.Domain.Events;
+using FluentAssertions;
 using Xunit;
 
 namespace Enna.Streamers.Domain.Tests.Unit
@@ -16,8 +16,9 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 var feed = new Feed(id, FeedType.Console, "@link");
 
-                Assert.Equal(id, feed.Id);
-                Assert.Equal(type, feed.Type);
+                feed.Id.Should().Be(id);
+                feed.Type.Should().Be(type);
+                feed.MessageTemplate.Should().Be("@link");
             }
 
             [Fact]
@@ -27,8 +28,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 var @event = feed.GetEvents().Last();
 
-                Assert.IsType<FeedCreatedEvent>(@event);
-                Assert.Equal(feed.Id, ((FeedCreatedEvent)@event).Feed.Id);
+                @event.Should().BeOfType<FeedCreatedEvent>();
+                @event.As<FeedCreatedEvent>().Feed.Should().Be(feed);
             }
         }
 
@@ -41,11 +42,11 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 channel.GoLive("https://youtube.com/live-link");
 
                 var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
-                var oldLastNotifiedutc = feed.LastNotifiedUtc;
+                var oldLastNotifiedUtc = feed.LastNotifiedUtc;
 
                 feed.Notify(channel);
 
-                Assert.True(feed.LastNotifiedUtc > oldLastNotifiedutc);
+                feed.LastNotifiedUtc.Should().BeAfter(oldLastNotifiedUtc);
             }
 
             [Fact]
@@ -55,15 +56,14 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 channel.GoLive("https://youtube.com/live-link");
 
                 var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
-                var oldLastNotifiedutc = feed.LastNotifiedUtc;
 
                 feed.Notify(channel);
 
                 var @event = feed.GetEvents().Last();
 
-                Assert.IsType<FeedNotifiedEvent>(@event);
-                Assert.Equal(feed.Id, ((FeedNotifiedEvent)@event).Feed.Id);
-                Assert.Equal(channel.Id, ((FeedNotifiedEvent)@event).Channel.Id);
+                @event.Should().BeOfType<FeedNotifiedEvent>();
+                @event.As<FeedNotifiedEvent>().Feed.Should().Be(feed);
+                @event.As<FeedNotifiedEvent>().Channel.Should().Be(channel);
             }
 
             [Fact]
@@ -81,8 +81,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 feed.Notify(channel);
 
-                Assert.Equal(oldLastNotifiedUtc, feed.LastNotifiedUtc);
-                Assert.Empty(feed.GetEvents());
+                feed.LastNotifiedUtc.Should().Be(oldLastNotifiedUtc);
+                feed.GetEvents().Should().BeEmpty();
             }
         }
     }

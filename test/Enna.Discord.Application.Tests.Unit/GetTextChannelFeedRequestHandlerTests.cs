@@ -1,5 +1,6 @@
 ﻿using Enna.Discord.Application.Contracts;
 using Enna.Discord.Domain;
+using Enna.Streamers.Domain;
 using FluentAssertions;
 using Xunit;
 
@@ -45,7 +46,7 @@ namespace Enna.Discord.Application.Tests.Unit
             public async Task ReturnTextChannelFeedDto_When_FeedIsFound()
             {
                 var feed = new TextChannelFeed(
-                    Guid.NewGuid(), 
+                    Guid.NewGuid(),
                     0L,
                     1L);
 

@@ -39,21 +39,10 @@ namespace Enna.Bot.Interactions
         {
             await DeferAsync(true);
 
-            var streamerId = Guid.NewGuid();
-
-            await SendToTenantAsync(
-                new AddStreamerRequest(streamerId, name, link));
-
-            var feedId = Guid.NewGuid();
-
             try
             {
                 await SendToTenantAsync(
-                    new AddFeedRequest(
-                        feedId, 
-                        streamerId, 
-                        "discord", 
-                        template));
+                    new AddStreamerRequest(Guid.NewGuid(), name, link, "discord", template));
             }
             catch (Exception ex)
             {
@@ -75,6 +64,7 @@ namespace Enna.Bot.Interactions
             await SendToTenantAsync(
                 new AddTextChannelFeedRequest(
                     Guid.NewGuid(),
+                    feedId,
                     Context.Guild.Id,
                     textChannelId));
 

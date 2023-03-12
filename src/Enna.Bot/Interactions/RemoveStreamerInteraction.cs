@@ -59,8 +59,25 @@ namespace Enna.Bot.Interactions
                 return;
             }
 
-            await SendToTenantAsync(
-                new RemoveStreamerRequest(streamerId));
+            try
+            {
+                await SendToTenantAsync(
+                    new RemoveStreamerRequest(streamerId));
+            }
+            catch (Exception ex)
+            {
+                await FollowupAsync(
+                    ephemeral: true,
+                    embed: new EmbedBuilder()
+                        .WithTitle("Streamer Not Removed")
+                        .WithDescription(
+                            ex.Message)
+                        .WithColor(Color.Red)
+                        .Build());
+
+                return;
+            }
+
 
             await FollowupAsync(
                 ephemeral: true,

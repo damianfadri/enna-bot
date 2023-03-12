@@ -45,5 +45,7 @@ namespace Enna.Streamers.Domain
                 AddEvent(new StreamerOfflineEvent(Streamer, this));
             }
         }
+
+        public static Channel Default => new Channel(Guid.NewGuid(), string.Empty);
     }
 }

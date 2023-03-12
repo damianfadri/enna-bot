@@ -8,6 +8,7 @@ using Enna.Bot.Workers;
 using Enna.Core.Application;
 using Enna.Discord.Application;
 using Enna.Streamers.Application;
+using Enna.Streamers.Domain;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

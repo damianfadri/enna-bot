@@ -15,10 +15,10 @@ namespace Enna.Streamers.Domain
 #pragma warning enable
         #endregion
 
-        public Feed(Guid id, FeedType type, string? template = null) : base(id)
+        public Feed(Guid id, FeedType type, string? messageTemplate) : base(id)
         {
             Type = type;
-            MessageTemplate = template;
+            MessageTemplate = messageTemplate;
 
             AddEvent(new FeedCreatedEvent(this));
         }
@@ -32,5 +32,7 @@ namespace Enna.Streamers.Domain
                 AddEvent(new FeedNotifiedEvent(this, channel));
             }
         }
+
+        public static Feed Default => new Feed(Guid.NewGuid(), FeedType.Console, null);
     }
 }

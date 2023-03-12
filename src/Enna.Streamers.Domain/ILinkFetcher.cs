@@ -1,6 +1,4 @@
-﻿using Enna.Streamers.Domain;
-
-namespace Enna.Bot
+﻿namespace Enna.Streamers.Domain
 {
     public interface ILinkFetcher
     {

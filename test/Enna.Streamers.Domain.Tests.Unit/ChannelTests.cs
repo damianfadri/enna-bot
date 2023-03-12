@@ -1,5 +1,5 @@
-﻿using Enna.Streamers.Domain;
-using Enna.Streamers.Domain.Events;
+﻿using Enna.Streamers.Domain.Events;
+using FluentAssertions;
 using Xunit;
 
 namespace Enna.Streamers.Domain.Tests.Unit
@@ -16,9 +16,9 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 var channel = new Channel(id, link);
 
-                Assert.Equal(id, channel.Id);
-                Assert.Equal(link, channel.Link);
-                Assert.Null(channel.StreamLink);
+                channel.Id.Should().Be(id);
+                channel.Link.Should().Be(link);
+                channel.StreamLink.Should().BeNull();
             }
         }
 
@@ -34,7 +34,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 var streamLink = "https://youtube.com/live-link";
                 channel.GoLive(streamLink);
 
-                Assert.Equal(streamLink, channel.StreamLink);
+               
+                channel.StreamLink.Should().Be(streamLink);
             }
 
             [Fact]
@@ -48,7 +49,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoLive("https://youtube.com/live-link");
 
-                Assert.True(channel.StreamStartedUtc > oldStreamStartedUtc);
+                channel.StreamStartedUtc.Should().BeAfter(oldStreamStartedUtc);
             }
 
             [Fact]
@@ -62,10 +63,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 var @event = channel.GetEvents().Last();
 
-                Assert.IsType<StreamerLiveEvent>(@event);
-
-                Assert.Equal(channel.Id,
-                    ((StreamerLiveEvent)@event).Channel.Id);
+                @event.Should().BeOfType<StreamerLiveEvent>();
+                @event.As<StreamerLiveEvent>().Channel.Should().Be(channel);
             }
 
             [Fact]
@@ -77,8 +76,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoLive("https://youtube.com/live-link");
 
-                Assert.True(channel.IsLive);
-                Assert.False(channel.IsOffline);
+                channel.IsLive.Should().BeTrue();
+                channel.IsOffline.Should().BeFalse();
             }
 
             [Fact]
@@ -95,8 +94,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoLive("https://youtube.com/live-link2");
 
-                Assert.Equal(oldStreamStartedUtc, channel.StreamStartedUtc);
-                Assert.Empty(channel.GetEvents());
+                channel.StreamStartedUtc.Should().Be(oldStreamStartedUtc);
+                channel.GetEvents().Should().BeEmpty();
             }
         }
 
@@ -114,7 +113,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoOffline();
 
-                Assert.Null(channel.StreamLink);
+                channel.StreamLink.Should().BeNull();
             }
 
             [Fact]
@@ -130,7 +129,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoOffline();
 
-                Assert.True(channel.StreamEndedUtc > oldStreamEndedUtc);
+                channel.StreamEndedUtc.Should().BeAfter(oldStreamEndedUtc);
+                channel.StreamEndedUtc.Should().BeAfter(channel.StreamStartedUtc);
             }
 
             [Fact]
@@ -146,10 +146,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 var @event = channel.GetEvents().Last();
 
-                Assert.IsType<StreamerOfflineEvent>(@event);
-
-                Assert.Equal(channel.Id,
-                    ((StreamerOfflineEvent)@event).Channel.Id);
+                @event.Should().BeOfType<StreamerOfflineEvent>();
+                @event.As<StreamerOfflineEvent>().Channel.Should().Be(channel);
             }
 
             [Fact]
@@ -163,8 +161,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoOffline();
 
-                Assert.True(channel.IsOffline);
-                Assert.False(channel.IsLive);
+                channel.IsOffline.Should().BeTrue();
+                channel.IsLive.Should().BeFalse();
             }
 
             [Fact]
@@ -183,8 +181,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoOffline();
 
-                Assert.Equal(oldStreamEndedUtc, channel.StreamEndedUtc);
-                Assert.Empty(channel.GetEvents());
+                channel.StreamEndedUtc.Should().Be(oldStreamEndedUtc);
+                channel.GetEvents().Should().BeEmpty();
             }
         }
     }

@@ -132,7 +132,8 @@ namespace Enna.Discord.Application.Tests.Unit
 
                 var feed = new Feed(
                     textChannelFeed.Id, 
-                    FeedType.Discord);
+                    FeedType.Discord,
+                    null);
 
                 var handler =
                     new TextChannelFeedNotifiedEventHandlerSutBuilder()

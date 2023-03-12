@@ -1,4 +1,5 @@
 ﻿using Enna.Core.Domain;
+using FluentAssertions;
 using Xunit;
 
 namespace Enna.Streamers.Domain.Tests.Unit
@@ -13,7 +14,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 var id = Guid.NewGuid();
                 var entity = new Entity(id);
 
-                Assert.Equal(id, entity.Id);
+                entity.Id.Should().Be(id);
             }
         }
 
@@ -24,11 +25,11 @@ namespace Enna.Streamers.Domain.Tests.Unit
             {
                 var entity = new Entity(Guid.NewGuid());
 
-                Assert.Empty(entity.GetEvents());
+                entity.GetEvents().Should().BeEmpty();
 
                 entity.AddEvent(new DummyEvent());
 
-                Assert.NotEmpty(entity.GetEvents());
+                entity.GetEvents().Should().HaveCount(1);
             }
         }
 
@@ -39,7 +40,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
             {
                 var entity = new Entity(Guid.NewGuid());
 
-                Assert.Empty(entity.GetEvents());
+                entity.GetEvents().Should().BeEmpty();
             }
 
             [Fact]
@@ -52,8 +53,9 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 entity.AddEvent(event1);
                 entity.AddEvent(event2);
 
-                Assert.Equal(event1, entity.GetEvents().First());
-                Assert.Equal(event2, entity.GetEvents().Skip(1).First());
+                entity.GetEvents().Should().HaveCount(2);
+                entity.GetEvents().First().Should().Be(event1);
+                entity.GetEvents().Last().Should().Be(event2);
             }
         }
 
@@ -67,11 +69,11 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 entity.AddEvent(new DummyEvent());
                 entity.AddEvent(new DummyEvent());
 
-                Assert.NotEmpty(entity.GetEvents());
+                entity.GetEvents().Should().HaveCount(2);
 
                 entity.ClearEvents();
 
-                Assert.Empty(entity.GetEvents());
+                entity.GetEvents().Should().BeEmpty();
             }
         }
     }

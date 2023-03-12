@@ -37,6 +37,7 @@ namespace Enna.Discord.Application.Tests.Unit
 
                 await handler.Handle(
                     new AddTextChannelFeedRequest(
+                            Guid.NewGuid(),
                             feed.Id,
                             0L,
                             1L),
