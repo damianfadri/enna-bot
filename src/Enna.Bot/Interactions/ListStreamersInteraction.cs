@@ -75,8 +75,6 @@ namespace Enna.Bot.Interactions
             {
                 builder.AppendLine(streamer.Name);
                 builder.AppendLine(streamer.Id.ToString());
-                builder.AppendLine();
-
                 builder.AppendLine(streamer.Channel.Link);
 
                 if (streamer.Feed.Type == "Discord")
