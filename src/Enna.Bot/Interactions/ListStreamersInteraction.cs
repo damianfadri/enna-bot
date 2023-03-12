@@ -85,7 +85,7 @@ namespace Enna.Bot.Interactions
                         await SendToTenantAsync(
                             new GetTextChannelFeedRequest(streamer.Feed.Id));
 
-                    builder.AppendLine($"<@{textChannel.ChannelId}>");
+                    builder.AppendLine($"<#{textChannel.ChannelId}>");
                 }
 
                 builder.AppendLine();
