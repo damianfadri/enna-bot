@@ -46,6 +46,25 @@ namespace Enna.Streamers.Domain
             }
         }
 
-        public static Channel Default => new Channel(Guid.NewGuid(), string.Empty);
+        public override bool Equals(object? obj)
+        {
+            if (obj is Channel that)
+            {
+                return object.Equals(Id, that.Id)
+                    && object.Equals(Link, that.Link)
+                    && object.Equals(StreamLink, that.StreamLink);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode()
+                + Link.GetHashCode()
+                + (StreamLink?.GetHashCode() ?? 0);
+        }
+
+        public static Channel Default => new Channel(Guid.Empty, string.Empty);
     }
 }

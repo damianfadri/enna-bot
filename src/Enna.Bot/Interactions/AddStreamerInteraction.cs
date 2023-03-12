@@ -41,8 +41,43 @@ namespace Enna.Bot.Interactions
 
             try
             {
+                var streamerId = Guid.NewGuid();
+
                 await SendToTenantAsync(
-                    new AddStreamerRequest(Guid.NewGuid(), name, link, "discord", template));
+                    new AddStreamerRequest(
+                        streamerId, 
+                        name, 
+                        link, 
+                        "discord", 
+                        template));
+
+                var textChannelId = Context.Channel.Id;
+                if (textChannel != null)
+                {
+                    textChannelId = textChannel.Id;
+                }
+
+                var streamer
+                    = await SendToTenantAsync(
+                        new GetStreamerRequest(streamerId));
+
+                await SendToTenantAsync(
+                    new AddTextChannelFeedRequest(
+                        Guid.NewGuid(),
+                        streamer.Feed.Id,
+                        Context.Guild.Id,
+                        textChannelId));
+
+                await FollowupAsync(
+                    ephemeral: true,
+                    embed: new EmbedBuilder()
+                        .WithTitle("Streamer Added")
+                        .WithDescription(
+                            $"Successfully added {name}.\r\n{streamerId}")
+                        .WithColor(Color.Green)
+                        .Build());
+
+                await UnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -54,30 +89,6 @@ namespace Enna.Bot.Interactions
                        .WithColor(Color.Red)
                        .Build());
             }
-
-            var textChannelId = Context.Channel.Id;
-            if (textChannel != null)
-            {
-               textChannelId = textChannel.Id;
-            }
-
-            await SendToTenantAsync(
-                new AddTextChannelFeedRequest(
-                    Guid.NewGuid(),
-                    feedId,
-                    Context.Guild.Id,
-                    textChannelId));
-
-            await FollowupAsync(
-                ephemeral: true,
-                embed: new EmbedBuilder()
-                    .WithTitle("Streamer Added")
-                    .WithDescription(
-                        $"Successfully added {name}.\r\n{streamerId}")
-                    .WithColor(Color.Green)
-                    .Build());
-
-            await UnitOfWork.CommitAsync();
         }
     }
 }

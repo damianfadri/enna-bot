@@ -1,5 +1,6 @@
 ﻿using Enna.Streamers.Application.Contracts;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace Enna.Streamers.Application.Tests.Unit
@@ -69,7 +70,8 @@ namespace Enna.Streamers.Application.Tests.Unit
             {
                 var handler =
                     new AddStreamerRequestHandlerSutBuilder()
-                        .WithLinkFetcherThatCanFetch("https://youtube.com/channel-link")
+                        .WithLinkFetcherThatCanFetch(
+                            "https://youtube.com/channel-link")
                         .Build();
 
                 var sut = () =>
@@ -90,7 +92,11 @@ namespace Enna.Streamers.Application.Tests.Unit
             {
                 var handler =
                     new AddStreamerRequestHandlerSutBuilder()
-                        .WithLinkFetcherThatCanFetch("https://youtube.com/channel-link")
+                        .WithLinkFetcherThatCanFetch(
+                            "https://youtube.com/channel-link")
+                        .WithVerifiableChannelRepository(out var channelRepository)
+                        .WithVerifiableFeedRepository(out var feedRepository)
+                        .WithVerifiableStreamerRepository(out var streamerRepository)
                         .Build();
 
                 await handler.Handle(
@@ -101,6 +107,10 @@ namespace Enna.Streamers.Application.Tests.Unit
                         "console",
                         "@link"),
                     CancellationToken.None);
+
+                channelRepository.Verify();
+                feedRepository.Verify();
+                streamerRepository.Verify();
             }
         }
     }

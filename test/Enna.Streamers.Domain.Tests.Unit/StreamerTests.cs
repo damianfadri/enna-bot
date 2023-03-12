@@ -9,7 +9,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
         public class Constructor_Should
         {
             [Fact]
-            public void SetProperties()
+            public void SetDefaultProperties()
             {
                 var id = Guid.NewGuid();
                 var name = "Friendly name";
@@ -18,8 +18,32 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 streamer.Id.Should().Be(id);
                 streamer.Name.Should().Be(name);
-                streamer.Channel.Should().BeNull();
-                streamer.Feed.Should().BeNull();
+                streamer.Channel.Should().Be(Channel.Default);
+                streamer.Feed.Should().Be(Feed.Default);
+            }
+
+            [Fact]
+            public void SetProperties()
+            {
+                var id = Guid.NewGuid();
+                var name = "Friendly name";
+
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(), 
+                        "https://youtube.com/channel-link");
+
+                var feed 
+                    = new Feed(
+                        Guid.NewGuid(), 
+                        FeedType.Discord);
+
+                var streamer = new Streamer(id, name, channel, feed);
+
+                streamer.Id.Should().Be(id);
+                streamer.Name.Should().Be(name);
+                streamer.Channel.Should().Be(channel);
+                streamer.Feed.Should().Be(feed);
             }
 
             [Fact]
@@ -30,7 +54,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 var @event = streamer.GetEvents().Last();
 
                 @event.Should().BeOfType<StreamerCreatedEvent>();
-                @event.As<StreamerCreatedEvent>().Streamer.Should().Be(streamer);
+                @event.As<StreamerCreatedEvent>().Streamer
+                    .Should().Be(streamer);
             }
         }
 
@@ -39,35 +64,47 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void SetChannelToLive()
             {
-                var channel = new Channel(Guid.NewGuid(), "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(), 
+                        "https://youtube.com/channel-link");
 
-                var streamer = 
-                    new Streamer(Guid.NewGuid(), "Friendly name")
-                    {
-                        Channel = channel
-                    };
+                var streamer =
+                    new Streamer(
+                        Guid.NewGuid(), 
+                        "Friendly name", 
+                        channel, 
+                        Feed.Default);
 
                 streamer.GoLive("https://youtube.com/stream-link");
 
                 streamer.IsLive.Should().BeTrue();
-                streamer.StreamLink.Should().Be("https://youtube.com/stream-link");
+                streamer.StreamLink
+                    .Should().Be("https://youtube.com/stream-link");
             }
 
             [Fact]
             public void NotChangeStreamLink_When_ChannelIsAlreadyLive()
             {
-                var channel = new Channel(Guid.NewGuid(), "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(), 
+                        "https://youtube.com/channel-link");
+
                 channel.GoLive("https://youtube.com/stream-link");
 
-                var streamer = 
-                    new Streamer(Guid.NewGuid(), "Friendly name")
-                    {
-                        Channel = channel
-                    };
+                var streamer =
+                    new Streamer(
+                        Guid.NewGuid(), 
+                        "Friendly name", 
+                        channel, 
+                        Feed.Default);
 
                 streamer.GoLive("https://youtube.com/stream-link2");
 
-                streamer.StreamLink.Should().Be("https://youtube.com/stream-link");
+                streamer.IsLive.Should().BeTrue();
+                streamer.StreamLink
+                    .Should().Be("https://youtube.com/stream-link");
             }
         }
 
@@ -76,11 +113,15 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void SetChannelToOffline()
             {
-                var channel = new Channel(Guid.NewGuid(), "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(), 
+                        "https://youtube.com/channel-link");
+
                 channel.GoLive("https://youtube.com/stream-link");
 
-                var streamer =
-                    new Streamer(
+                var streamer 
+                    = new Streamer(
                         Guid.NewGuid(), 
                         "Friendly name", 
                         channel, 

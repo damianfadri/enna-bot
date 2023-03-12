@@ -32,8 +32,6 @@ namespace Enna.Streamers.Application.Handlers
             AddStreamerRequest request, 
             CancellationToken cancellationToken)
         {
-            var streamer = new Streamer(request.Id, request.Name);
-
             var foundFetcher = 
                 _fetchers.FirstOrDefault(
                     fetcher => fetcher.CanFetch(request.ChannelLink));
@@ -44,21 +42,29 @@ namespace Enna.Streamers.Application.Handlers
                     $"'{request.ChannelLink}' is not a valid channel link.");
             }
 
-            var channel = new Channel(Guid.NewGuid(), request.ChannelLink);
-            await _channelRepository.Add(channel);
-
-            if (!Enum.TryParse<FeedType>(request.FeedType, true, out var feedType))
+            if (!Enum.TryParse<FeedType>(
+                value: request.FeedType, 
+                ignoreCase: true, 
+                result: out var feedType))
             {
                 throw new InvalidOperationException(
                     $"'{request.FeedType}' is not a valid feed type.");
             }
 
-            var feed = new Feed(Guid.NewGuid(), feedType, request.MessageTemplate);
-            await _feedRepository.Add(feed);
+            var streamer 
+                = new Streamer(
+                    request.Id, 
+                    request.Name,
+                    new Channel(
+                        Guid.NewGuid(), 
+                        request.ChannelLink),
+                    new Feed(
+                        Guid.NewGuid(),
+                        feedType,
+                        request.MessageTemplate));
 
-            streamer.Channel = channel;
-            streamer.Feed = feed;
-
+            await _feedRepository.Add(streamer.Feed);
+            await _channelRepository.Add(streamer.Channel);
             await _streamerRepository.Add(streamer);
         }
     }

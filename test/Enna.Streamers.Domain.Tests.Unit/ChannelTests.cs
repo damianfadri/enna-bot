@@ -27,37 +27,40 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void UpdateStreamLink_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 var streamLink = "https://youtube.com/live-link";
                 channel.GoLive(streamLink);
 
-               
                 channel.StreamLink.Should().Be(streamLink);
             }
 
             [Fact]
             public void UpdateStreamStartedUtc_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 var oldStreamStartedUtc = channel.StreamStartedUtc;
 
                 channel.GoLive("https://youtube.com/live-link");
 
-                channel.StreamStartedUtc.Should().BeAfter(oldStreamStartedUtc);
+                channel.StreamStartedUtc
+                    .Should().BeAfter(oldStreamStartedUtc);
             }
 
             [Fact]
             public void BroadcastStreamerWentLiveEvent_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
 
@@ -70,9 +73,10 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void SetChannelToLive_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
 
@@ -83,9 +87,10 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void DoNothing_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
                 channel.ClearEvents();
@@ -104,9 +109,10 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void SetStreamLinkToNull_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 var streamLink = "https://youtube.com/live-link";
                 channel.GoLive(streamLink);
@@ -119,9 +125,10 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void UpdateStreamEndedUtc_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
 
@@ -130,15 +137,17 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 channel.GoOffline();
 
                 channel.StreamEndedUtc.Should().BeAfter(oldStreamEndedUtc);
-                channel.StreamEndedUtc.Should().BeAfter(channel.StreamStartedUtc);
+                channel.StreamEndedUtc
+                    .Should().BeAfter(channel.StreamStartedUtc);
             }
 
             [Fact]
             public void BroadcastStreamerWentOfflineEvent_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
 
@@ -153,9 +162,10 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void SetChannelToOffline_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
 
@@ -168,9 +178,10 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void DoNothing_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
                 channel.GoOffline();

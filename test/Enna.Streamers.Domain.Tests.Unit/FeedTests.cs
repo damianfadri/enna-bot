@@ -9,15 +9,24 @@ namespace Enna.Streamers.Domain.Tests.Unit
         public class Constructor_Should
         {
             [Fact]
+            public void SetDefaultProperties()
+            {
+                var feed = Feed.Default;
+
+                feed.Id.Should().Be(Guid.Empty);
+                feed.Type.Should().Be(FeedType.Console);
+                feed.MessageTemplate.Should().BeNull();
+            }
+
+            [Fact]
             public void SetProperties()
             {
                 var id = Guid.NewGuid();
-                var type = FeedType.Console;
 
-                var feed = new Feed(id, FeedType.Console, "@link");
+                var feed = new Feed(id, FeedType.Discord, "@link");
 
                 feed.Id.Should().Be(id);
-                feed.Type.Should().Be(type);
+                feed.Type.Should().Be(FeedType.Discord);
                 feed.MessageTemplate.Should().Be("@link");
             }
 

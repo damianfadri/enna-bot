@@ -34,20 +34,14 @@ namespace Enna.Streamers.Application.Handlers
                 new StreamerDto(
                     streamer.Id,
                     streamer.Name,
-                    streamer.Channels
-                        .Select(channel =>
-                            new ChannelDto(
-                                channel.Id,
-                                channel.Link,
-                                channel.StreamLink))
-                        .ToList(),
-                    streamer.Feeds
-                        .Select(feed =>
-                            new FeedDto(
-                                feed.Id,
-                                feed.Type.ToString(),
-                                feed.MessageTemplate))
-                        .ToList());
+                    new ChannelDto(
+                        streamer.Channel.Id,
+                        streamer.Channel.Link,
+                        streamer.Channel.StreamLink),
+                    new FeedDto(
+                        streamer.Feed.Id,
+                        streamer.Feed.Type.ToString(),
+                        streamer.Feed.MessageTemplate));
         }
     }
 }

@@ -6,8 +6,8 @@ namespace Enna.Streamers.Domain
     public class Streamer : TenantEntity
     {
         public string Name { get; init; }
-        public Channel Channel { get; set; }
-        public Feed Feed { get; set; }
+        public Channel Channel { get; init; }
+        public Feed Feed { get; init; }
 
         public bool IsLive => Channel.IsLive;
         public string? StreamLink => Channel.StreamLink;

@@ -51,6 +51,42 @@ namespace Enna.Streamers.Application.Tests.Unit
             return this;
         }
 
+        public AddStreamerRequestHandlerSutBuilder WithVerifiableChannelRepository(out Mock<IChannelRepository> channelRepository)
+        {
+            channelRepository = Mock.Get(_channelRepository);
+
+            channelRepository
+                .Setup(repository => repository.Add(It.IsAny<Channel>()))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            return this;
+        }
+
+        public AddStreamerRequestHandlerSutBuilder WithVerifiableFeedRepository(out Mock<IFeedRepository> feedRepository)
+        {
+            feedRepository = Mock.Get(_feedRepository);
+
+            feedRepository
+                .Setup(repository => repository.Add(It.IsAny<Feed>()))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            return this;
+        }
+
+        public AddStreamerRequestHandlerSutBuilder WithVerifiableStreamerRepository(out Mock<IStreamerRepository> streamerRepository)
+        {
+            streamerRepository = Mock.Get(_streamerRepository);
+
+            streamerRepository
+                .Setup(repository => repository.Add(It.IsAny<Streamer>()))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            return this;
+        }
+
         public AddStreamerRequestHandler Build()
         {
             return new AddStreamerRequestHandler(

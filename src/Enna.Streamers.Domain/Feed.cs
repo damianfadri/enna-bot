@@ -15,7 +15,7 @@ namespace Enna.Streamers.Domain
 #pragma warning enable
         #endregion
 
-        public Feed(Guid id, FeedType type, string? messageTemplate) : base(id)
+        public Feed(Guid id, FeedType type, string? messageTemplate = null) : base(id)
         {
             Type = type;
             MessageTemplate = messageTemplate;
@@ -33,6 +33,27 @@ namespace Enna.Streamers.Domain
             }
         }
 
-        public static Feed Default => new Feed(Guid.NewGuid(), FeedType.Console, null);
+        public override bool Equals(object? obj)
+        {
+            if (obj is Feed that)
+            {
+                return object.Equals(Id, that.Id)
+                    && object.Equals(Type, that.Type)
+                    && object.Equals(MessageTemplate, that.MessageTemplate)
+                    && object.Equals(LastNotifiedUtc, that.LastNotifiedUtc);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode()
+                + Type.GetHashCode()
+                + (MessageTemplate?.GetHashCode() ?? 0)
+                + LastNotifiedUtc.GetHashCode();
+        }
+
+        public static Feed Default => new Feed(Guid.Empty, FeedType.Console, null);
     }
 }

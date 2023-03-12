@@ -29,16 +29,7 @@ namespace Enna.Streamers.Application.Handlers
                     $"Streamer id {request.StreamerId} does not exist.");
             }
 
-            var channel = streamer.Channels
-                .FirstOrDefault(channel => channel.Id == request.ChannelId);
-
-            if (channel == null)
-            {
-                throw new InvalidOperationException(
-                    $"Channel id {request.ChannelId} does not exist for streamer.");
-            }
-
-            streamer.GoLive(channel, request.StreamLink);
+            streamer.GoLive(request.StreamLink);
         }
     }
 }
