@@ -19,10 +19,43 @@ namespace Enna.Discord.Application.Tests.Unit
 
                 sut.Should().Throw<ArgumentNullException>();
             }
+
+            [Fact]
+            public void ThrowException_When_FeedRepositoryIsNull()
+            {
+                var sut = () =>
+                    new AddTextChannelFeedRequestHandlerSutBuilder()
+                        .WithNullFeedRepository()
+                        .Build();
+
+                sut.Should().Throw<ArgumentNullException>();
+            }
         }
 
         public class Handle_Should
         {
+            [Fact]
+            public async Task ThrowException_When_FeedIsNotFound()
+            {
+                var feedId = Guid.NewGuid();
+
+                var handler
+                    = new AddTextChannelFeedRequestHandlerSutBuilder()
+                        .WithMissingFeed(feedId)
+                        .Build();
+
+                var sut = () => 
+                    handler.Handle(
+                        new AddTextChannelFeedRequest(
+                                Guid.NewGuid(),
+                                feedId,
+                                0L,
+                                1L),
+                            CancellationToken.None);
+
+                await sut.Should().ThrowAsync<InvalidOperationException>();
+            }
+
             [Fact]
             public async Task SaveTextChannelToDatabase()
             {
@@ -33,6 +66,8 @@ namespace Enna.Discord.Application.Tests.Unit
 
                 var handler =
                     new AddTextChannelFeedRequestHandlerSutBuilder()
+                        .WithExistingFeed(feed)
+                        .WithVerifiableTextChannelRepository(out var textChannelRepository)
                         .Build();
 
                 await handler.Handle(
@@ -42,6 +77,8 @@ namespace Enna.Discord.Application.Tests.Unit
                             0L,
                             1L),
                         CancellationToken.None);
+
+                textChannelRepository.Verify();
             }
         }
     }

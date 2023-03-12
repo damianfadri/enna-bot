@@ -7,17 +7,17 @@ namespace Enna.Discord.Domain
     {
         public ulong Guild { get; init; }
         public ulong Channel { get; init; }
-
-        #region Navigation Properties
-#pragma warning disable
         public Feed Feed { get; set; }
-#pragma warning enable
-        #endregion
 
-        public TextChannelFeed(Guid id, ulong guild, ulong channel) : base(id)
+        public TextChannelFeed(Guid id, ulong guild, ulong channel) : this(id, Feed.Default, guild, channel)
         {
-            Guild = guild;
+        }
+
+        public TextChannelFeed(Guid id, Feed feed, ulong guild, ulong channel) : base(id)
+        {
+            Feed = feed;
             Channel = channel;
+            Guild = guild;
         }
     }
 }

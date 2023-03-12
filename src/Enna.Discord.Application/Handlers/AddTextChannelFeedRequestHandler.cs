@@ -36,6 +36,7 @@ namespace Enna.Discord.Application.Handlers
             var textChannelFeed = 
                 new TextChannelFeed(
                     request.Id,
+                    feed,
                     request.GuildId,
                     request.ChannelId);
 
