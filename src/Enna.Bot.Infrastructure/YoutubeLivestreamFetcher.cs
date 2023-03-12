@@ -1,7 +1,7 @@
 ﻿using Enna.Streamers.Domain;
 using System.Text.RegularExpressions;
 
-namespace Enna.Bot
+namespace Enna.Bot.Infrastructure
 {
     public class YoutubeLivestreamFetcher : ILinkFetcher
     {

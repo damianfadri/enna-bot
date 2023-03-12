@@ -46,9 +46,7 @@ public class Program
                     .AddSingleton<DiscordSocketClient>();
 
                 services
-                    .AddTransient<IWorker, FindLiveStreamersWorker>()
-                    .AddTransient<ILinkFetcher, YoutubeLivestreamFetcher>()
-                    .AddHttpClient<YoutubeLivestreamFetcher>();
+                    .AddTransient<IWorker, FindLiveStreamersWorker>();
 
                 services
                     .AddMediatR(config =>
@@ -56,6 +54,7 @@ public class Program
 
                 services
                     .AddInteractions()
+                    .AddInfrastructureServices()
                     .AddCoreApplicationServices()
                     .AddTextChannelFeedServices()
                     .AddStreamerApplicationServices(configuration)
