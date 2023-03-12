@@ -2,7 +2,6 @@
 using Enna.Streamers.Application.Contracts;
 using Enna.Streamers.Domain;
 using MediatR;
-using System.Threading.Channels;
 
 namespace Enna.Bot.Workers
 {
