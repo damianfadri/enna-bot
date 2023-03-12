@@ -1,5 +1,4 @@
 ﻿using Enna.Core.Domain;
-using Enna.Streamers.Domain.Events;
 
 namespace Enna.Streamers.Domain
 {
@@ -9,15 +8,8 @@ namespace Enna.Streamers.Domain
         public string? StreamLink { get; private set; }
         public DateTime StreamStartedUtc { get; private set; }
         public DateTime StreamEndedUtc { get; private set; }
-
         public bool IsLive => StreamLink != null;
         public bool IsOffline => StreamLink == null;
-
-        #region Navigation Properties
-#pragma warning disable
-        public Streamer Streamer { get; init; }
-#pragma warning enable
-        #endregion
 
         public Channel(Guid id, string link) : base(id)
         {
@@ -30,8 +22,6 @@ namespace Enna.Streamers.Domain
             {
                 StreamLink = streamLink;
                 StreamStartedUtc = DateTime.UtcNow;
-
-                AddEvent(new StreamerLiveEvent(Streamer, this));
             }
         }
 
@@ -41,9 +31,28 @@ namespace Enna.Streamers.Domain
             {
                 StreamLink = null;
                 StreamEndedUtc = DateTime.UtcNow;
-
-                AddEvent(new StreamerOfflineEvent(Streamer, this));
             }
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Channel that)
+            {
+                return object.Equals(Id, that.Id)
+                    && object.Equals(Link, that.Link)
+                    && object.Equals(StreamLink, that.StreamLink);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode()
+                + Link.GetHashCode()
+                + (StreamLink?.GetHashCode() ?? 0);
+        }
+
+        public static Channel Default => new Channel(Guid.Empty, string.Empty);
     }
 }

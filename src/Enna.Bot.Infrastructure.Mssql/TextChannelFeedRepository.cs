@@ -22,10 +22,16 @@ namespace Enna.Bot.Infrastructure.Mssql
             return await _context.TextChannelFeeds.ToListAsync();
         }
 
+        public async Task<TextChannelFeed?> FindByFeedId(Guid feedId)
+        {
+            return await _context.TextChannelFeeds
+                .FirstOrDefaultAsync(textChannel => textChannel.Feed.Id == feedId);
+        }
+
         public async Task<TextChannelFeed?> FindById(Guid id)
         {
             return await _context.TextChannelFeeds
-                .FirstOrDefaultAsync(feed => feed.Id == id);
+                .FirstOrDefaultAsync(textChannel => textChannel.Id == id);
         }
 
         public async Task Remove(TextChannelFeed entity)

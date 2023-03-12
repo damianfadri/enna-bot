@@ -8,6 +8,7 @@ using Enna.Bot.Workers;
 using Enna.Core.Application;
 using Enna.Discord.Application;
 using Enna.Streamers.Application;
+using Enna.Streamers.Domain;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,9 +46,7 @@ public class Program
                     .AddSingleton<DiscordSocketClient>();
 
                 services
-                    .AddTransient<IWorker, FindLiveStreamersWorker>()
-                    .AddTransient<ILinkFetcher, YoutubeLivestreamFetcher>()
-                    .AddHttpClient<YoutubeLivestreamFetcher>();
+                    .AddTransient<IWorker, FindLiveStreamersWorker>();
 
                 services
                     .AddMediatR(config =>
@@ -55,6 +54,7 @@ public class Program
 
                 services
                     .AddInteractions()
+                    .AddInfrastructureServices()
                     .AddCoreApplicationServices()
                     .AddTextChannelFeedServices()
                     .AddStreamerApplicationServices(configuration)

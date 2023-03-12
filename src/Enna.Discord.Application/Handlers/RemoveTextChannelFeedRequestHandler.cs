@@ -4,21 +4,21 @@ using MediatR;
 
 namespace Enna.Discord.Application.Handlers
 {
-    public class GetTextChannelFeedRequestHandler
-        : IRequestHandler<GetTextChannelFeedRequest, TextChannelFeedDto>
+    public class RemoveTextChannelFeedRequestHandler : 
+        IRequestHandler<RemoveTextChannelFeedRequest>
     {
         private readonly ITextChannelFeedRepository _textChannelRepository;
 
-        public GetTextChannelFeedRequestHandler(
-            ITextChannelFeedRepository textChannelRepository) 
+        public RemoveTextChannelFeedRequestHandler(
+            ITextChannelFeedRepository textChannelRepository)
         {
             ArgumentNullException.ThrowIfNull(textChannelRepository);
 
             _textChannelRepository = textChannelRepository;
         }
 
-        public async Task<TextChannelFeedDto> Handle(
-            GetTextChannelFeedRequest request, 
+        public async Task Handle(
+            RemoveTextChannelFeedRequest request, 
             CancellationToken cancellationToken)
         {
             var feed = await _textChannelRepository.FindByFeedId(request.FeedId);
@@ -29,10 +29,7 @@ namespace Enna.Discord.Application.Handlers
                     $"Feed id {request.FeedId} does not exist.");
             }
 
-            return new TextChannelFeedDto(
-                feed.Id,
-                feed.Guild,
-                feed.Channel);
+            await _textChannelRepository.Remove(feed);
         }
     }
 }

@@ -20,16 +20,16 @@ namespace Enna.Bot.Infrastructure.Mssql
         public async Task<IEnumerable<Streamer>> FindAll()
         {
             return await _context.Streamers
-                .Include(streamer => streamer.Channels)
-                .Include(streamer => streamer.Feeds)
+                .Include(streamer => streamer.Channel)
+                .Include(streamer => streamer.Feed)
                 .ToListAsync();
         }
 
         public async Task<Streamer?> FindById(Guid id)
         {
             return await _context.Streamers
-                .Include(streamer => streamer.Channels)
-                .Include(streamer => streamer.Feeds)
+                .Include(streamer => streamer.Channel)
+                .Include(streamer => streamer.Feed)
                 .FirstOrDefaultAsync(streamer => streamer.Id == id);
         }
 

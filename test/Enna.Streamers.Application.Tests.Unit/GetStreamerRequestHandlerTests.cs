@@ -45,34 +45,34 @@ namespace Enna.Streamers.Application.Tests.Unit
             [Fact]
             public async Task ReturnStreamerDto_When_StreamerIsFound()
             {
-                var streamer = new Streamer(
-                    Guid.NewGuid(), 
-                    "Streamer name");
-
-                streamer.Channels.Add(
-                    new Channel(
-                        Guid.NewGuid(), 
-                        "https://youtube.com/channel-link"));
-
-                streamer.Channels.Add(
-                    new Channel(
+                var streamer
+                    = new Streamer(
                         Guid.NewGuid(),
-                        "https://twitch.tv/channel-link2"));
+                        "Streamer name",
+                        new Channel(
+                            Guid.NewGuid(),
+                            "https://youtube.com/channel-link"),
+                        new Feed(
+                            Guid.NewGuid(),
+                            FeedType.Discord,
+                            "@link"));
 
                 var handler
                      = new GetStreamerRequestHandlerSutBuilder()
                          .WithExistingStreamer(streamer)
                          .Build();
 
-                var dto = await handler.Handle(
-                    new GetStreamerRequest(
-                        streamer.Id),
-                    CancellationToken.None);
+                var dto 
+                    = await handler.Handle(
+                        new GetStreamerRequest(
+                            streamer.Id),
+                        CancellationToken.None);
 
                 dto.Id.Should().Be(streamer.Id);
                 dto.Name.Should().Be(streamer.Name);
-                dto.Channels.Should().Contain(channel => channel.Link == "https://youtube.com/channel-link");
-                dto.Channels.Should().Contain(channel => channel.Link == "https://twitch.tv/channel-link2");
+                dto.Channel.Link.Should().Be("https://youtube.com/channel-link");
+                dto.Feed.Type.Should().Be("Discord");
+                dto.Feed.MessageTemplate.Should().Be("@link");
             }
         }
     }

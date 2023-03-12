@@ -2,7 +2,7 @@
 
 namespace Enna.Discord.Application.Contracts
 {
-    public record GetGuildTenantByGuildRequest(
+    public record GetGuildTenantRequest(
         ulong GuildId) 
         : IRequest<GuildTenantDto>;
 }

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Enna.Discord.Application.Tests.Unit
 {
-    public class GetTextChannelFeedRequestHandlerTests
+    public class RemoveTextChannelFeedRequestHandlerTests
     {
         public class Constructor_Should
         {
@@ -13,7 +13,7 @@ namespace Enna.Discord.Application.Tests.Unit
             public void ThrowException_When_TextChannelRepositoryIsNull()
             {
                 var sut = () =>
-                    new GetTextChannelFeedRequestHandlerSutBuilder()
+                    new RemoveTextChannelFeedRequestHandlerSutBuilder()
                         .WithNullTextChannelRepository()
                         .Build();
 
@@ -28,42 +28,40 @@ namespace Enna.Discord.Application.Tests.Unit
             {
                 var feedId = Guid.NewGuid();
 
-                var handler 
-                    = new GetTextChannelFeedRequestHandlerSutBuilder()
+                var handler
+                    = new RemoveTextChannelFeedRequestHandlerSutBuilder()
                         .WithMissingFeed(feedId)
                         .Build();
 
                 var sut = () =>
                     handler.Handle(
-                        new GetTextChannelFeedRequest(feedId),
+                        new RemoveTextChannelFeedRequest(feedId),
                         CancellationToken.None);
 
                 await sut.Should().ThrowAsync<InvalidOperationException>();
             }
 
             [Fact]
-            public async Task ReturnTextChannelFeedDto()
+            public async Task RemoveFeedFromDatabase()
             {
-                var feed 
+                var feed
                     = new TextChannelFeed(
                         Guid.NewGuid(),
                         0L,
                         1L);
 
-                var handler 
-                    = new GetTextChannelFeedRequestHandlerSutBuilder()
+                var handler
+                    = new RemoveTextChannelFeedRequestHandlerSutBuilder()
                         .WithExistingFeed(feed)
+                        .WithVerifiableTextChannelRepository(
+                            out var textChannelRepository)
                         .Build();
 
-                var dto 
-                    = await handler.Handle(
-                        new GetTextChannelFeedRequest(
-                            feed.Id),
-                        CancellationToken.None);
+                await handler.Handle(
+                    new RemoveTextChannelFeedRequest(feed.Id),
+                    CancellationToken.None);
 
-                dto.Id.Should().Be(feed.Id);
-                dto.GuildId.Should().Be(feed.Guild);
-                dto.ChannelId.Should().Be(feed.Channel);
+                textChannelRepository.Verify();
             }
         }
     }

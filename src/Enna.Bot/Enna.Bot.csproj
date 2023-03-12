@@ -27,11 +27,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Enna.Bot.Infrastructure.Mssql\Enna.Bot.Infrastructure.Mssql.csproj" />
+    <ProjectReference Include="..\Enna.Bot.Infrastructure\Enna.Bot.Infrastructure.csproj" />
     <ProjectReference Include="..\Enna.Core.Application\Enna.Core.Application.csproj" />
     <ProjectReference Include="..\Enna.Discord.Application\Enna.Discord.Application.csproj" />
     <ProjectReference Include="..\Enna.Streamers.Application\Enna.Streamers.Application.csproj" />

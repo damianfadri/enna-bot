@@ -19,6 +19,28 @@ namespace Enna.Streamers.Application.Tests.Unit
 
                 sut.Should().Throw<ArgumentNullException>();
             }
+
+            [Fact]
+            public void ThrowException_When_ChannelRepositoryIsNull()
+            {
+                var sut = () =>
+                    new RemoveStreamerRequestHandlerSutBuilder()
+                        .WithNullChannelRepository()
+                        .Build();
+
+                sut.Should().Throw<ArgumentNullException>();
+            }
+
+            [Fact]
+            public void ThrowException_When_FeedRepositoryIsNull()
+            {
+                var sut = () =>
+                    new RemoveStreamerRequestHandlerSutBuilder()
+                        .WithNullFeedRepository()
+                        .Build();
+
+                sut.Should().Throw<ArgumentNullException>();
+            }
         }
 
         public class Handle_Should
@@ -51,11 +73,18 @@ namespace Enna.Streamers.Application.Tests.Unit
                 var handler =
                     new RemoveStreamerRequestHandlerSutBuilder()
                         .WithExistingStreamer(streamer)
+                        .WithVerifiableStreamerRepository(out var streamerRepository)
+                        .WithVerifiableChannelRepository(out var channelRepository)
+                        .WithVerifiableFeedRepository(out var feedRepository)
                         .Build();
 
                 await handler.Handle(
                     new RemoveStreamerRequest(streamer.Id),
                     CancellationToken.None);
+
+                streamerRepository.Verify();
+                channelRepository.Verify();
+                feedRepository.Verify();
             }
         }
     }

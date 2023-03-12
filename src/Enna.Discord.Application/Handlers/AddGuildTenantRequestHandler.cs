@@ -23,9 +23,19 @@ namespace Enna.Discord.Application.Handlers
             AddGuildTenantRequest request, 
             CancellationToken cancellationToken)
         {
-            var tenant = new Tenant<ulong>(
-                request.Id,
-                request.GuildId);
+            var existingTenant 
+                = await _tenantRepository.FindByGuildId(request.GuildId);
+
+            if (existingTenant != null)
+            {
+                throw new InvalidOperationException(
+                    $"Guild id '{request.GuildId}' already has a corresponding tenant.");
+            }
+
+            var tenant 
+                = new Tenant<ulong>(
+                    request.Id,
+                    request.GuildId);
 
             await _tenantRepository.Add(tenant);
         }

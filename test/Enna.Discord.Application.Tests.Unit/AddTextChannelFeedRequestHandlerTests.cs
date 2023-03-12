@@ -19,27 +19,67 @@ namespace Enna.Discord.Application.Tests.Unit
 
                 sut.Should().Throw<ArgumentNullException>();
             }
+
+            [Fact]
+            public void ThrowException_When_FeedRepositoryIsNull()
+            {
+                var sut = () =>
+                    new AddTextChannelFeedRequestHandlerSutBuilder()
+                        .WithNullFeedRepository()
+                        .Build();
+
+                sut.Should().Throw<ArgumentNullException>();
+            }
         }
 
         public class Handle_Should
         {
             [Fact]
+            public async Task ThrowException_When_FeedIsNotFound()
+            {
+                var feedId = Guid.NewGuid();
+
+                var handler
+                    = new AddTextChannelFeedRequestHandlerSutBuilder()
+                        .WithMissingFeed(feedId)
+                        .Build();
+
+                var sut = () => 
+                    handler.Handle(
+                        new AddTextChannelFeedRequest(
+                                Guid.NewGuid(),
+                                feedId,
+                                0L,
+                                1L),
+                            CancellationToken.None);
+
+                await sut.Should().ThrowAsync<InvalidOperationException>();
+            }
+
+            [Fact]
             public async Task SaveTextChannelToDatabase()
             {
                 var feed = new Feed(
                     Guid.NewGuid(),
-                    FeedType.Discord);
+                    FeedType.Discord, 
+                    "@link");
 
-                var handler =
-                    new AddTextChannelFeedRequestHandlerSutBuilder()
+                var handler 
+                    = new AddTextChannelFeedRequestHandlerSutBuilder()
+                        .WithExistingFeed(feed)
+                        .WithVerifiableTextChannelRepository(
+                            out var textChannelRepository)
                         .Build();
 
                 await handler.Handle(
                     new AddTextChannelFeedRequest(
+                            Guid.NewGuid(),
                             feed.Id,
                             0L,
                             1L),
                         CancellationToken.None);
+
+                textChannelRepository.Verify();
             }
         }
     }

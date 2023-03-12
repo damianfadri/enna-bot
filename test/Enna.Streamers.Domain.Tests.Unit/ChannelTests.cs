@@ -1,5 +1,5 @@
-﻿using Enna.Streamers.Domain;
-using Enna.Streamers.Domain.Events;
+﻿using Enna.Streamers.Domain.Events;
+using FluentAssertions;
 using Xunit;
 
 namespace Enna.Streamers.Domain.Tests.Unit
@@ -16,9 +16,9 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 var channel = new Channel(id, link);
 
-                Assert.Equal(id, channel.Id);
-                Assert.Equal(link, channel.Link);
-                Assert.Null(channel.StreamLink);
+                channel.Id.Should().Be(id);
+                channel.Link.Should().Be(link);
+                channel.StreamLink.Should().BeNull();
             }
         }
 
@@ -27,66 +27,54 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void UpdateStreamLink_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 var streamLink = "https://youtube.com/live-link";
                 channel.GoLive(streamLink);
 
-                Assert.Equal(streamLink, channel.StreamLink);
+                channel.StreamLink.Should().Be(streamLink);
             }
 
             [Fact]
             public void UpdateStreamStartedUtc_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 var oldStreamStartedUtc = channel.StreamStartedUtc;
 
                 channel.GoLive("https://youtube.com/live-link");
 
-                Assert.True(channel.StreamStartedUtc > oldStreamStartedUtc);
-            }
-
-            [Fact]
-            public void BroadcastStreamerWentLiveEvent_When_ChannelIsOffline()
-            {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
-
-                channel.GoLive("https://youtube.com/live-link");
-
-                var @event = channel.GetEvents().Last();
-
-                Assert.IsType<StreamerLiveEvent>(@event);
-
-                Assert.Equal(channel.Id,
-                    ((StreamerLiveEvent)@event).Channel.Id);
+                channel.StreamStartedUtc
+                    .Should().BeAfter(oldStreamStartedUtc);
             }
 
             [Fact]
             public void SetChannelToLive_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
 
-                Assert.True(channel.IsLive);
-                Assert.False(channel.IsOffline);
+                channel.IsLive.Should().BeTrue();
+                channel.IsOffline.Should().BeFalse();
             }
 
             [Fact]
             public void DoNothing_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
                 channel.ClearEvents();
@@ -95,8 +83,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoLive("https://youtube.com/live-link2");
 
-                Assert.Equal(oldStreamStartedUtc, channel.StreamStartedUtc);
-                Assert.Empty(channel.GetEvents());
+                channel.StreamStartedUtc.Should().Be(oldStreamStartedUtc);
+                channel.GetEvents().Should().BeEmpty();
             }
         }
 
@@ -105,24 +93,26 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void SetStreamLinkToNull_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 var streamLink = "https://youtube.com/live-link";
                 channel.GoLive(streamLink);
 
                 channel.GoOffline();
 
-                Assert.Null(channel.StreamLink);
+                channel.StreamLink.Should().BeNull();
             }
 
             [Fact]
             public void UpdateStreamEndedUtc_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
 
@@ -130,49 +120,34 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoOffline();
 
-                Assert.True(channel.StreamEndedUtc > oldStreamEndedUtc);
-            }
-
-            [Fact]
-            public void BroadcastStreamerWentOfflineEvent_When_ChannelIsLive()
-            {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
-
-                channel.GoLive("https://youtube.com/live-link");
-
-                channel.GoOffline();
-
-                var @event = channel.GetEvents().Last();
-
-                Assert.IsType<StreamerOfflineEvent>(@event);
-
-                Assert.Equal(channel.Id,
-                    ((StreamerOfflineEvent)@event).Channel.Id);
+                channel.StreamEndedUtc.Should().BeAfter(oldStreamEndedUtc);
+                channel.StreamEndedUtc
+                    .Should().BeAfter(channel.StreamStartedUtc);
             }
 
             [Fact]
             public void SetChannelToOffline_When_ChannelIsLive()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
 
                 channel.GoOffline();
 
-                Assert.True(channel.IsOffline);
-                Assert.False(channel.IsLive);
+                channel.IsOffline.Should().BeTrue();
+                channel.IsLive.Should().BeFalse();
             }
 
             [Fact]
             public void DoNothing_When_ChannelIsOffline()
             {
-                var channel = new Channel(
-                    id: Guid.NewGuid(),
-                    link: "https://youtube.com/channel-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
 
                 channel.GoLive("https://youtube.com/live-link");
                 channel.GoOffline();
@@ -183,8 +158,8 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 channel.GoOffline();
 
-                Assert.Equal(oldStreamEndedUtc, channel.StreamEndedUtc);
-                Assert.Empty(channel.GetEvents());
+                channel.StreamEndedUtc.Should().Be(oldStreamEndedUtc);
+                channel.GetEvents().Should().BeEmpty();
             }
         }
     }

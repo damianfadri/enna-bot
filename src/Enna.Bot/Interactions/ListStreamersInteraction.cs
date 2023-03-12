@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Enna.Core.Domain;
+using Enna.Discord.Application.Contracts;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 using System.Text;
@@ -42,17 +43,30 @@ namespace Enna.Bot.Interactions
                 return;
             }
 
-            await FollowupAsync(
-                ephemeral: true,
-                embed: new EmbedBuilder()
-                    .WithTitle("Streamer List")
-                    .WithDescription(
-                        BuildStreamerListMessage(streamers))
-                    .WithColor(Color.Purple)
-                    .Build());
+            try
+            {
+                await FollowupAsync(
+                    ephemeral: true,
+                    embed: new EmbedBuilder()
+                        .WithTitle("Streamer List")
+                        .WithDescription(
+                            await BuildStreamerListMessage(streamers))
+                        .WithColor(Color.Purple)
+                        .Build());
+            }
+            catch (Exception ex)
+            {
+                await FollowupAsync(
+                    ephemeral: true,
+                    embed: new EmbedBuilder()
+                        .WithTitle("Streamer List")
+                        .WithDescription(ex.Message)
+                        .WithColor(Color.Red)
+                        .Build());
+            }
         }
 
-        private string BuildStreamerListMessage(
+        private async Task<string> BuildStreamerListMessage(
             IEnumerable<StreamerDto> streamers)
         {
             var builder = new StringBuilder();
@@ -60,13 +74,18 @@ namespace Enna.Bot.Interactions
             foreach (var streamer in streamers)
             {
                 builder.AppendLine(streamer.Name);
+                builder.AppendLine(streamer.Id.ToString());
+                builder.AppendLine(streamer.Channel.Link);
 
-                foreach (var channel in streamer.Channels)
+                if (streamer.Feed.Type == "Discord")
                 {
-                    builder.AppendLine(channel.Link);
+                    var textChannel =
+                        await SendToTenantAsync(
+                            new GetTextChannelFeedRequest(streamer.Feed.Id));
+
+                    builder.AppendLine($"<#{textChannel.ChannelId}>");
                 }
 
-                builder.AppendLine($"Id: {streamer.Id}");
                 builder.AppendLine();
             }
 

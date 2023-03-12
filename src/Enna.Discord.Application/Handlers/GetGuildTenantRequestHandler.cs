@@ -4,12 +4,12 @@ using MediatR;
 
 namespace Enna.Discord.Application.Handlers
 {
-    public class GetGuildTenantByGuildRequestHandler
-        : IRequestHandler<GetGuildTenantByGuildRequest, GuildTenantDto>
+    public class GetGuildTenantRequestHandler
+        : IRequestHandler<GetGuildTenantRequest, GuildTenantDto>
     {
         private readonly IGuildTenantRepository _tenantRepository;
 
-        public GetGuildTenantByGuildRequestHandler(
+        public GetGuildTenantRequestHandler(
             IGuildTenantRepository tenantRepository) 
         {
             ArgumentNullException.ThrowIfNull(tenantRepository);
@@ -18,7 +18,7 @@ namespace Enna.Discord.Application.Handlers
         }
 
         public async Task<GuildTenantDto> Handle(
-            GetGuildTenantByGuildRequest request, 
+            GetGuildTenantRequest request, 
             CancellationToken cancellationToken)
         {
             var tenant = await _tenantRepository.FindByGuildId(request.GuildId);

@@ -13,16 +13,20 @@ namespace Enna.Discord.Application.Handlers
         private const string DEFAULT_TEMPLATE = "@link";
 
         private readonly DiscordSocketClient _client;
+        private readonly IFeedRepository _feedRepository;
         private readonly ITextChannelFeedRepository _textChannelRepository;
 
         public TextChannelFeedNotifiedEventHandler(
             DiscordSocketClient client,
+            IFeedRepository feedRepository,
             ITextChannelFeedRepository textChannelRepository)
         {
             ArgumentNullException.ThrowIfNull(client);
+            ArgumentNullException.ThrowIfNull(feedRepository);
             ArgumentNullException.ThrowIfNull(textChannelRepository);
 
             _client = client;
+            _feedRepository = feedRepository;
             _textChannelRepository = textChannelRepository;
         }
 
@@ -35,33 +39,41 @@ namespace Enna.Discord.Application.Handlers
                 return;
             }
 
-            var details = await _textChannelRepository
-                .FindById(notification.Feed.Id);
+            var feed = await _feedRepository.FindById(notification.Feed.Id);
+            if (feed == null)
+            {
+                throw new InvalidOperationException(
+                    $"Feed id '{notification.Feed.Id}' does not exist.");
+            }
+
+            var details 
+                = await _textChannelRepository
+                    .FindByFeedId(notification.Feed.Id);
 
             if (details == null)
             {
                 throw new InvalidOperationException(
-                    $"No corresponding feed details for feed {notification.Feed.Id}.");
+                    $"No corresponding feed details for feed '{notification.Feed.Id}'.");
             }
 
             var guild = _client.GetGuild(details.Guild);
             if (guild == null)
             {
                 throw new InvalidOperationException(
-                    $"Server {details.Guild} does not exist on this bot instance.");
+                    $"Server '{details.Guild}' does not exist on this bot instance.");
             }
 
             var channel = guild.GetChannel(details.Channel) as ITextChannel;
             if (channel == null)
             {
                 throw new InvalidOperationException(
-                    $"Text channel {details.Channel} does not exist on this server.");
+                    $"Text channel '{details.Channel}' does not exist on this server.");
             }
 
             var formatter = new StringFormatter();
             formatter.Add("@link", notification.Channel.StreamLink);
 
-            var template = details.Template ?? DEFAULT_TEMPLATE;
+            var template = feed.MessageTemplate ?? DEFAULT_TEMPLATE;
             await channel.SendMessageAsync(formatter.Format(template));
         }
     }
