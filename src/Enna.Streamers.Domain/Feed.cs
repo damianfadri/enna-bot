@@ -9,12 +9,6 @@ namespace Enna.Streamers.Domain
         public string? MessageTemplate { get; init; }
         public DateTime LastNotifiedUtc { get; private set; }
 
-        #region Navigation Properties
-#pragma warning disable
-        public Streamer Streamer { get; init; }
-#pragma warning enable
-        #endregion
-
         public Feed(Guid id, FeedType type, string? messageTemplate = null) : base(id)
         {
             Type = type;

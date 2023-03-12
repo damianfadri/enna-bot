@@ -13,12 +13,6 @@ namespace Enna.Streamers.Domain
         public bool IsLive => StreamLink != null;
         public bool IsOffline => StreamLink == null;
 
-        #region Navigation Properties
-#pragma warning disable
-        public Streamer Streamer { get; init; }
-#pragma warning enable
-        #endregion
-
         public Channel(Guid id, string link) : base(id)
         {
             Link = link;
@@ -30,8 +24,6 @@ namespace Enna.Streamers.Domain
             {
                 StreamLink = streamLink;
                 StreamStartedUtc = DateTime.UtcNow;
-
-                AddEvent(new StreamerLiveEvent(Streamer, this));
             }
         }
 
@@ -41,8 +33,6 @@ namespace Enna.Streamers.Domain
             {
                 StreamLink = null;
                 StreamEndedUtc = DateTime.UtcNow;
-
-                AddEvent(new StreamerOfflineEvent(Streamer, this));
             }
         }
 

@@ -64,17 +64,10 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void SetChannelToLive()
             {
-                var channel 
-                    = new Channel(
-                        Guid.NewGuid(), 
-                        "https://youtube.com/channel-link");
-
                 var streamer =
                     new Streamer(
                         Guid.NewGuid(), 
-                        "Friendly name", 
-                        channel, 
-                        Feed.Default);
+                        "Friendly name");
 
                 streamer.GoLive("https://youtube.com/stream-link");
 
@@ -106,6 +99,23 @@ namespace Enna.Streamers.Domain.Tests.Unit
                 streamer.StreamLink
                     .Should().Be("https://youtube.com/stream-link");
             }
+
+            [Fact]
+            public void BroadcastStreamerLiveEvent()
+            {
+                var streamer =
+                    new Streamer(
+                        Guid.NewGuid(),
+                        "Friendly name");
+
+                streamer.GoLive("https://youtube.com/live-link");
+
+                var @event = streamer.GetEvents().Last();
+
+                @event.Should().BeOfType<StreamerLiveEvent>();
+                @event.As<StreamerLiveEvent>().Streamer.Should().Be(streamer);
+                @event.As<StreamerLiveEvent>().Channel.Should().Be(streamer.Channel);
+            }
         }
 
         public class GoOffline_Should
@@ -131,6 +141,32 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 streamer.IsLive.Should().BeFalse();
                 streamer.StreamLink.Should().BeNull();
+            }
+
+            [Fact]
+            public void BroadcastStreamerOfflineEvent()
+            {
+                var channel
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
+
+                channel.GoLive("https://youtube.com/stream-link");
+
+                var streamer =
+                    new Streamer(
+                        Guid.NewGuid(),
+                        "Friendly name",
+                        channel,
+                        Feed.Default);
+
+                streamer.GoOffline();
+
+                var @event = streamer.GetEvents().Last();
+
+                @event.Should().BeOfType<StreamerOfflineEvent>();
+                @event.As<StreamerOfflineEvent>().Streamer.Should().Be(streamer);
+                @event.As<StreamerOfflineEvent>().Channel.Should().Be(streamer.Channel);
             }
         }
     }
