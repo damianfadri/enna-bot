@@ -64,10 +64,11 @@ namespace Enna.Discord.Application.Tests.Unit
                     FeedType.Discord, 
                     "@link");
 
-                var handler =
-                    new AddTextChannelFeedRequestHandlerSutBuilder()
+                var handler 
+                    = new AddTextChannelFeedRequestHandlerSutBuilder()
                         .WithExistingFeed(feed)
-                        .WithVerifiableTextChannelRepository(out var textChannelRepository)
+                        .WithVerifiableTextChannelRepository(
+                            out var textChannelRepository)
                         .Build();
 
                 await handler.Handle(

@@ -1,6 +1,5 @@
 ﻿using Enna.Discord.Application.Contracts;
 using Enna.Discord.Domain;
-using Enna.Streamers.Domain;
 using FluentAssertions;
 using Xunit;
 
@@ -29,8 +28,8 @@ namespace Enna.Discord.Application.Tests.Unit
             {
                 var feedId = Guid.NewGuid();
 
-                var handler =
-                    new GetTextChannelFeedRequestHandlerSutBuilder()
+                var handler 
+                    = new GetTextChannelFeedRequestHandlerSutBuilder()
                         .WithMissingFeed(feedId)
                         .Build();
 
@@ -43,20 +42,21 @@ namespace Enna.Discord.Application.Tests.Unit
             }
 
             [Fact]
-            public async Task ReturnTextChannelFeedDto_When_FeedIsFound()
+            public async Task ReturnTextChannelFeedDto()
             {
-                var feed = new TextChannelFeed(
-                    Guid.NewGuid(),
-                    0L,
-                    1L);
+                var feed 
+                    = new TextChannelFeed(
+                        Guid.NewGuid(),
+                        0L,
+                        1L);
 
-                var handler =
-                    new GetTextChannelFeedRequestHandlerSutBuilder()
+                var handler 
+                    = new GetTextChannelFeedRequestHandlerSutBuilder()
                         .WithExistingFeed(feed)
                         .Build();
 
-                var dto = 
-                    await handler.Handle(
+                var dto 
+                    = await handler.Handle(
                         new GetTextChannelFeedRequest(
                             feed.Id),
                         CancellationToken.None);

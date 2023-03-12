@@ -60,7 +60,7 @@ namespace Enna.Bot.Interactions
             {
                 var tenant =
                     await Mediator.Send(
-                        new GetGuildTenantByGuildRequest(guildId));
+                        new GetGuildTenantRequest(guildId));
 
                 return tenant.Id;
             }
