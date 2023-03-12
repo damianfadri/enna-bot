@@ -43,14 +43,27 @@ namespace Enna.Bot.Interactions
                 return;
             }
 
-            await FollowupAsync(
-                ephemeral: true,
-                embed: new EmbedBuilder()
-                    .WithTitle("Streamer List")
-                    .WithDescription(
-                        await BuildStreamerListMessage(streamers))
-                    .WithColor(Color.Purple)
-                    .Build());
+            try
+            {
+                await FollowupAsync(
+                    ephemeral: true,
+                    embed: new EmbedBuilder()
+                        .WithTitle("Streamer List")
+                        .WithDescription(
+                            await BuildStreamerListMessage(streamers))
+                        .WithColor(Color.Purple)
+                        .Build());
+            }
+            catch (Exception ex)
+            {
+                await FollowupAsync(
+                    ephemeral: true,
+                    embed: new EmbedBuilder()
+                        .WithTitle("Streamer List")
+                        .WithDescription(ex.Message)
+                        .WithColor(Color.Red)
+                        .Build());
+            }
         }
 
         private async Task<string> BuildStreamerListMessage(

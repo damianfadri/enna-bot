@@ -23,7 +23,7 @@ namespace Enna.Discord.Application.Tests.Unit
         public GetTextChannelFeedRequestHandlerSutBuilder WithMissingFeed(Guid feedId)
         {
             Mock.Get(_textChannelRepository)
-                .Setup(repository => repository.FindById(feedId))
+                .Setup(repository => repository.FindByFeedId(feedId))
                 .ReturnsAsync((TextChannelFeed)null!);
 
             return this;
@@ -32,7 +32,7 @@ namespace Enna.Discord.Application.Tests.Unit
         public GetTextChannelFeedRequestHandlerSutBuilder WithExistingFeed(TextChannelFeed feed)
         {
             Mock.Get(_textChannelRepository)
-                .Setup(repository => repository.FindById(feed.Id))
+                .Setup(repository => repository.FindByFeedId(feed.Id))
                 .ReturnsAsync(feed);
 
             return this;

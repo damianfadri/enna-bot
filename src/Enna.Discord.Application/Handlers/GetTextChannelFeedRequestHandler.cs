@@ -21,7 +21,7 @@ namespace Enna.Discord.Application.Handlers
             GetTextChannelFeedRequest request, 
             CancellationToken cancellationToken)
         {
-            var feed = await _textChannelRepository.FindById(request.FeedId);
+            var feed = await _textChannelRepository.FindByFeedId(request.FeedId);
 
             if (feed == null)
             {
