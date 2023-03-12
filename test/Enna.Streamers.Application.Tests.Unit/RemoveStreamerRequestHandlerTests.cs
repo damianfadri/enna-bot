@@ -51,11 +51,14 @@ namespace Enna.Streamers.Application.Tests.Unit
                 var handler =
                     new RemoveStreamerRequestHandlerSutBuilder()
                         .WithExistingStreamer(streamer)
+                        .WithVerifiableStreamerRepository(out var streamerRepository)
                         .Build();
 
                 await handler.Handle(
                     new RemoveStreamerRequest(streamer.Id),
                     CancellationToken.None);
+
+                streamerRepository.Verify();
             }
         }
     }

@@ -64,24 +64,15 @@ namespace Enna.Bot.Interactions
                 builder.AppendLine(streamer.Id.ToString());
                 builder.AppendLine();
 
-                builder.AppendLine("Channels:");
-                foreach (var channel in streamer.Channels)
-                {
-                    builder.AppendLine(channel.Link);
-                }
+                builder.AppendLine(streamer.Channel.Link);
 
-                builder.AppendLine($"Feeds: ");
-                foreach (var feed in streamer.Feeds)
+                if (streamer.Feed.Type == "Discord")
                 {
-                    builder.AppendLine(feed.MessageTemplate ?? "@link");
-                    if (feed.Type == "Discord")
-                    {
-                        var textChannel =
-                            await SendToTenantAsync(
-                                new GetTextChannelFeedRequest(feed.Id));
+                    var textChannel =
+                        await SendToTenantAsync(
+                            new GetTextChannelFeedRequest(streamer.Feed.Id));
 
-                        builder.AppendLine($"<@{textChannel.ChannelId}>");
-                    }
+                    builder.AppendLine($"<@{textChannel.ChannelId}>");
                 }
 
                 builder.AppendLine();

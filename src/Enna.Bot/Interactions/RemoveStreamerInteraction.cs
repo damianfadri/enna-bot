@@ -41,28 +41,25 @@ namespace Enna.Bot.Interactions
                 return;
             }
 
-            var streamer = 
-                await SendToTenantAsync(
-                    new GetStreamerRequest(streamerId));
-
-            if (streamer == null)
+            try
             {
+                var streamer =
+                    await SendToTenantAsync(
+                        new GetStreamerRequest(streamerId));
+
+                await SendToTenantAsync(
+                    new RemoveStreamerRequest(streamerId));
+
                 await FollowupAsync(
                     ephemeral: true,
                     embed: new EmbedBuilder()
-                        .WithTitle("Streamer Not Removed")
+                        .WithTitle("Streamer Removed")
                         .WithDescription(
-                            $"Streamer id '{rawStreamerId}' does not exist.")
-                        .WithColor(Color.Red)
+                            $"Successfully removed {streamer.Name}.\r\nId: {streamerId}")
+                        .WithColor(Color.Green)
                         .Build());
 
-                return;
-            }
-
-            try
-            {
-                await SendToTenantAsync(
-                    new RemoveStreamerRequest(streamerId));
+                await UnitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -74,21 +71,7 @@ namespace Enna.Bot.Interactions
                             ex.Message)
                         .WithColor(Color.Red)
                         .Build());
-
-                return;
             }
-
-
-            await FollowupAsync(
-                ephemeral: true,
-                embed: new EmbedBuilder()
-                    .WithTitle("Streamer Removed")
-                    .WithDescription(
-                        $"Successfully removed {streamer.Name}.\r\nId: {streamerId}")
-                    .WithColor(Color.Green)
-                    .Build());
-
-            await UnitOfWork.CommitAsync();
         }
     }
 }

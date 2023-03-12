@@ -38,6 +38,18 @@ namespace Enna.Streamers.Application.Tests.Unit
             return this;
         }
 
+        public RemoveStreamerRequestHandlerSutBuilder WithVerifiableStreamerRepository(out Mock<IStreamerRepository> streamerRepository)
+        {
+            streamerRepository = Mock.Get(_streamerRepository);
+
+            streamerRepository
+                .Setup(repository => repository.Remove(It.IsAny<Streamer>()))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            return this;
+        }
+
         public RemoveStreamerRequestHandler Build()
         {
             return new RemoveStreamerRequestHandler(_streamerRepository);
