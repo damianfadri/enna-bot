@@ -1,5 +1,4 @@
 ﻿using Enna.Core.Domain;
-using Enna.Streamers.Domain.Events;
 
 namespace Enna.Streamers.Domain
 {
@@ -9,7 +8,6 @@ namespace Enna.Streamers.Domain
         public string? StreamLink { get; private set; }
         public DateTime StreamStartedUtc { get; private set; }
         public DateTime StreamEndedUtc { get; private set; }
-
         public bool IsLive => StreamLink != null;
         public bool IsOffline => StreamLink == null;
 
