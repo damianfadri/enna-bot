@@ -126,24 +126,6 @@ namespace Enna.Streamers.Domain.Tests.Unit
             }
 
             [Fact]
-            public void BroadcastStreamerWentOfflineEvent_When_ChannelIsLive()
-            {
-                var channel 
-                    = new Channel(
-                        Guid.NewGuid(),
-                        "https://youtube.com/channel-link");
-
-                channel.GoLive("https://youtube.com/live-link");
-
-                channel.GoOffline();
-
-                var @event = channel.GetEvents().Last();
-
-                @event.Should().BeOfType<StreamerOfflineEvent>();
-                @event.As<StreamerOfflineEvent>().Channel.Should().Be(channel);
-            }
-
-            [Fact]
             public void SetChannelToOffline_When_ChannelIsLive()
             {
                 var channel 

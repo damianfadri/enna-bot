@@ -49,7 +49,7 @@ namespace Enna.Discord.Application.Tests.Unit
         public TextChannelFeedNotifiedEventHandlerSutBuilder WithMissingTextChannelDetails(Guid feedId)
         {
             Mock.Get(_textChannelRepository)
-                .Setup(repository => repository.FindById(feedId))
+                .Setup(repository => repository.FindByFeedId(feedId))
                 .ReturnsAsync((TextChannelFeed)null!);
 
             return this;
@@ -63,7 +63,7 @@ namespace Enna.Discord.Application.Tests.Unit
                 .ReturnsAsync(feed);
 
             Mock.Get(_textChannelRepository)
-                .Setup(repository => repository.FindById(textChannel.Id))
+                .Setup(repository => repository.FindByFeedId(textChannel.Id))
                 .ReturnsAsync(textChannel);
 
             return this;

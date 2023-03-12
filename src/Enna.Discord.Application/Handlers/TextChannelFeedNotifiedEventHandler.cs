@@ -43,30 +43,31 @@ namespace Enna.Discord.Application.Handlers
             if (feed == null)
             {
                 throw new InvalidOperationException(
-                    $"Feed id {notification.Feed.Id} does not exist.");
+                    $"Feed id '{notification.Feed.Id}' does not exist.");
             }
 
-            var details = await _textChannelRepository
-                .FindById(notification.Feed.Id);
+            var details 
+                = await _textChannelRepository
+                    .FindByFeedId(notification.Feed.Id);
 
             if (details == null)
             {
                 throw new InvalidOperationException(
-                    $"No corresponding feed details for feed {notification.Feed.Id}.");
+                    $"No corresponding feed details for feed '{notification.Feed.Id}'.");
             }
 
             var guild = _client.GetGuild(details.Guild);
             if (guild == null)
             {
                 throw new InvalidOperationException(
-                    $"Server {details.Guild} does not exist on this bot instance.");
+                    $"Server '{details.Guild}' does not exist on this bot instance.");
             }
 
             var channel = guild.GetChannel(details.Channel) as ITextChannel;
             if (channel == null)
             {
                 throw new InvalidOperationException(
-                    $"Text channel {details.Channel} does not exist on this server.");
+                    $"Text channel '{details.Channel}' does not exist on this server.");
             }
 
             var formatter = new StringFormatter();

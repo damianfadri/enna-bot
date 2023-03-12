@@ -51,6 +51,8 @@ namespace Enna.Bot.Interactions
                         "discord", 
                         template));
 
+                await UnitOfWork.CommitAsync();
+
                 var textChannelId = Context.Channel.Id;
                 if (textChannel != null)
                 {
