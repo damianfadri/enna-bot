@@ -3,6 +3,7 @@ using Discord;
 using Enna.Streamers.Application.Contracts;
 using MediatR;
 using Enna.Core.Domain;
+using Enna.Discord.Application.Contracts;
 
 namespace Enna.Bot.Interactions
 {
@@ -46,6 +47,12 @@ namespace Enna.Bot.Interactions
                 var streamer =
                     await SendToTenantAsync(
                         new GetStreamerRequest(streamerId));
+
+                if (streamer.Feed.Type == "Discord")
+                {
+                    await SendToTenantAsync(
+                        new RemoveTextChannelFeedRequest(streamer.Feed.Id));
+                }
 
                 await SendToTenantAsync(
                     new RemoveStreamerRequest(streamerId));
