@@ -2,6 +2,7 @@
 using Enna.Streamers.Application.Contracts;
 using Enna.Streamers.Domain;
 using MediatR;
+using System.Threading.Channels;
 
 namespace Enna.Bot.Workers
 {
@@ -28,38 +29,32 @@ namespace Enna.Bot.Workers
 
             foreach (var streamer in streamers)
             {
-                foreach (var channel in streamer.Channels)
+                if (streamer.Feed.Equals(Feed.Default))
                 {
-                    if (!streamer.Feeds.Any())
-                    {
-                        continue;
-                    }
-
-                    var foundFetcher = _fetchers.FirstOrDefault(
-                        fetcher => fetcher.CanFetch(channel.Link));
-
-                    if (foundFetcher == null)
-                    {
-                        continue;
-                    }
-
-                    var streamLink = await foundFetcher.Fetch(channel.Link);
-                    if (streamLink == null)
-                    {
-                        await SendToTenantAsync(
-                            new GoOfflineRequest(
-                                streamer.Id,
-                                channel.Id));
-
-                        continue;
-                    }
-
-                    await SendToTenantAsync(
-                        new GoLiveRequest(
-                            streamer.Id, 
-                            channel.Id, 
-                            streamLink));
+                    continue;
                 }
+
+                var foundFetcher = _fetchers.FirstOrDefault(
+                    fetcher => fetcher.CanFetch(streamer.Channel.Link));
+
+                if (foundFetcher == null)
+                {
+                    continue;
+                }
+
+                var streamLink 
+                    = await foundFetcher.Fetch(streamer.Channel.Link);
+
+                if (streamLink == null)
+                {
+                    await SendToTenantAsync(
+                        new GoOfflineRequest(streamer.Id));
+
+                    continue;
+                }
+
+                await SendToTenantAsync(
+                    new GoLiveRequest(streamer.Id, streamLink));
             }
 
             await UnitOfWork.CommitAsync();

@@ -3,8 +3,7 @@
 namespace Enna.Streamers.Application.Contracts
 {
     public record GoLiveRequest(
-        Guid StreamerId, 
-        Guid ChannelId,
+        Guid StreamerId,
         string StreamLink)
         : IRequest;
 }
