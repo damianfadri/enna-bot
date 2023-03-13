@@ -72,6 +72,7 @@ namespace Enna.Discord.Application.Handlers
 
             var formatter = new StringFormatter();
             formatter.Add("@link", notification.Channel.StreamLink);
+            formatter.Add(@"\n", "\n");
 
             var template = feed.MessageTemplate ?? DEFAULT_TEMPLATE;
             await channel.SendMessageAsync(formatter.Format(template));
