@@ -10,6 +10,9 @@ namespace Enna.Bot.Infrastructure
             services.AddTransient<ILinkFetcher, YoutubeLivestreamFetcher>();
             services.AddHttpClient<YoutubeLivestreamFetcher>();
 
+            services.AddTransient<ILinkFetcher, TwitchLivestreamFetcher>();
+            services.AddHttpClient<TwitchLivestreamFetcher>();
+
             return services;
         }
     }
