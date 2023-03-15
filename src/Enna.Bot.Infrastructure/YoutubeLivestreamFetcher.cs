@@ -12,7 +12,7 @@ namespace Enna.Bot.Infrastructure
         private const string YT_WATCH_LINK_REGEX
             = @"https://www\.youtube\.com/watch\?v=.{11}";
         private const string YT_WATCHING_NOW_REGEX
-            = @"(""isLiveNow"":true)|(""isLive"":true)";
+            = @"""text"":"" watching now""";
 
         private readonly HttpClient _httpClient;
 
