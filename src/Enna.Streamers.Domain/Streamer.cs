@@ -28,21 +28,21 @@ namespace Enna.Streamers.Domain
 
         public void GoLive(string streamLink, DateTime goLiveUtc)
         {
-            if (IsOffline)
-            {
-                Channel.GoLive(streamLink, goLiveUtc);
-                Feed.Notify(Channel, goLiveUtc);
+            Channel.GoLive(streamLink, goLiveUtc);
 
+            if (IsLive)
+            {
+                Feed.Notify(Channel, goLiveUtc);
                 AddEvent(new StreamerLiveEvent(this, Channel));
             }
         }
 
         public void GoOffline(DateTime goOfflineUtc)
         {
-            if (IsLive)
-            {
-                Channel.GoOffline(goOfflineUtc);
+            Channel.GoOffline(goOfflineUtc);
 
+            if (IsOffline)
+            {
                 AddEvent(new StreamerOfflineEvent(this, Channel));
             }
         }
