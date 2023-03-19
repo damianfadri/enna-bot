@@ -17,11 +17,11 @@ namespace Enna.Streamers.Domain
             AddEvent(new FeedCreatedEvent(this));
         }
 
-        public void Notify(Channel channel)
+        public void Notify(Channel channel, DateTime lastNotifiedUtc)
         {
             if (LastNotifiedUtc < channel.StreamStartedUtc)
             {
-                LastNotifiedUtc = DateTime.UtcNow;
+                LastNotifiedUtc = lastNotifiedUtc;
 
                 AddEvent(new FeedNotifiedEvent(this, channel));
             }

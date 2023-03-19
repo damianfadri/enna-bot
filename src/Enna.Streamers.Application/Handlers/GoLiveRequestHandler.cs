@@ -29,7 +29,7 @@ namespace Enna.Streamers.Application.Handlers
                     $"Streamer id {request.StreamerId} does not exist.");
             }
 
-            streamer.GoLive(request.StreamLink);
+            streamer.GoLive(request.StreamLink, DateTime.UtcNow);
         }
     }
 }

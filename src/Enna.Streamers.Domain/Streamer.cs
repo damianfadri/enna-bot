@@ -10,7 +10,7 @@ namespace Enna.Streamers.Domain
         public Feed Feed { get; init; }
 
         public bool IsLive => Channel.IsLive;
-        public bool IsOffline => !IsLive;
+        public bool IsOffline => Channel.IsOffline;
         public string? StreamLink => Channel.StreamLink;
 
         public Streamer(Guid id, string name) : this(id, name, Channel.Default, Feed.Default)
@@ -26,23 +26,23 @@ namespace Enna.Streamers.Domain
             AddEvent(new StreamerCreatedEvent(this));
         }
 
-        public void GoLive(string streamLink)
+        public void GoLive(string streamLink, DateTime goLiveUtc)
         {
-            if (IsOffline)
-            {
-                Channel.GoLive(streamLink);
-                Feed.Notify(Channel);
+            Channel.GoLive(streamLink, goLiveUtc);
 
+            if (IsLive)
+            {
+                Feed.Notify(Channel, goLiveUtc);
                 AddEvent(new StreamerLiveEvent(this, Channel));
             }
         }
 
-        public void GoOffline()
+        public void GoOffline(DateTime goOfflineUtc)
         {
-            if (IsLive)
-            {
-                Channel.GoOffline();
+            Channel.GoOffline(goOfflineUtc);
 
+            if (IsOffline)
+            {
                 AddEvent(new StreamerOfflineEvent(this, Channel));
             }
         }

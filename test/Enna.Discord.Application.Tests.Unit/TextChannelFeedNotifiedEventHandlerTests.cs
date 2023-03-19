@@ -58,7 +58,9 @@ namespace Enna.Discord.Application.Tests.Unit
                     Guid.NewGuid(),
                     "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/stream-link");
+                channel.GoLive(
+                    "https://youtube.com/stream-link", 
+                    new DateTime(2020, 09, 17, 21, 56, 52));
 
                 await handler.Handle(
                     new FeedNotifiedEvent(
@@ -82,7 +84,9 @@ namespace Enna.Discord.Application.Tests.Unit
                     Guid.NewGuid(),
                     "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/stream-link");
+                channel.GoLive(
+                    "https://youtube.com/stream-link", 
+                    new DateTime(2022, 01, 20, 21, 12, 14));
 
                 var sut = () =>
                     handler.Handle(
@@ -109,7 +113,9 @@ namespace Enna.Discord.Application.Tests.Unit
                     Guid.NewGuid(),
                     "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/stream-link");
+                channel.GoLive(
+                    "https://youtube.com/stream-link",
+                    new DateTime(2017, 01, 03, 01, 40, 01));
 
                 var sut = () =>
                     handler.Handle(
@@ -145,7 +151,9 @@ namespace Enna.Discord.Application.Tests.Unit
                     Guid.NewGuid(),
                     "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/stream-link");
+                channel.GoLive(
+                    "https://youtube.com/stream-link", 
+                    new DateTime(2010, 11, 09, 08, 29, 18));
 
                 var sut = () =>
                     handler.Handle(

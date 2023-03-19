@@ -47,26 +47,44 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void UpdateLastNotifiedUtc_When_FeedIsNotYetNotified()
             {
-                var channel = new Channel(Guid.NewGuid(), "https://youtube.com/some-channel");
-                channel.GoLive("https://youtube.com/live-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(), 
+                        "https://youtube.com/some-channel");
+
+                channel.GoLive(
+                    "https://youtube.com/live-link", 
+                    new DateTime(1993, 08, 23, 03, 49, 52));
 
                 var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
                 var oldLastNotifiedUtc = feed.LastNotifiedUtc;
 
-                feed.Notify(channel);
+                feed.Notify(
+                    channel, 
+                    new DateTime(1993, 08, 23, 03, 49, 52));
 
                 feed.LastNotifiedUtc.Should().BeAfter(oldLastNotifiedUtc);
+                feed.LastNotifiedUtc
+                    .Should().Be(new DateTime(1993, 08, 23, 03, 49, 52));
             }
 
             [Fact]
             public void BroadcastFeedNotifiedEvent_When_FeedIsNotYetNotified()
             {
-                var channel = new Channel(Guid.NewGuid(), "https://youtube.com/some-channel");
-                channel.GoLive("https://youtube.com/live-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(), 
+                        "https://youtube.com/some-channel");
+
+                channel.GoLive(
+                    "https://youtube.com/live-link", 
+                    new DateTime(2005, 12, 07, 21, 53, 03));
 
                 var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
 
-                feed.Notify(channel);
+                feed.Notify(
+                    channel, 
+                    new DateTime(2005, 12, 07, 21, 53, 03));
 
                 var @event = feed.GetEvents().Last();
 
@@ -78,19 +96,30 @@ namespace Enna.Streamers.Domain.Tests.Unit
             [Fact]
             public void DoNothing_When_FeedIsAlreadyNotified()
             {
-                var channel = new Channel(Guid.NewGuid(), "https://youtube.com/some-channel");
-                channel.GoLive("https://youtube.com/live-link");
+                var channel 
+                    = new Channel(
+                        Guid.NewGuid(), 
+                        "https://youtube.com/some-channel");
+
+                channel.GoLive(
+                    "https://youtube.com/live-link", 
+                    new DateTime(1976, 03, 16, 07, 20, 55));
 
                 var feed = new Feed(Guid.NewGuid(), FeedType.Console, "@link");
 
-                feed.Notify(channel);
+                feed.Notify(
+                    channel, 
+                    new DateTime(1976, 03, 16, 07, 20, 55));
+
                 feed.ClearEvents();
 
-                var oldLastNotifiedUtc = feed.LastNotifiedUtc;
+                feed.Notify(
+                    channel,
+                    new DateTime(1976, 03, 16, 08, 30, 15));
 
-                feed.Notify(channel);
+                feed.LastNotifiedUtc
+                    .Should().Be(new DateTime(1976, 03, 16, 07, 20, 55));
 
-                feed.LastNotifiedUtc.Should().Be(oldLastNotifiedUtc);
                 feed.GetEvents().Should().BeEmpty();
             }
         }
