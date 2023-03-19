@@ -24,6 +24,23 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
         public class GoLive_Should
         {
+
+            [Fact]
+            public void UpdateLastFoundOnline()
+            {
+                var channel
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
+
+                channel.GoLive(
+                    "https://youtube.com/live-link",
+                    new DateTime(2021, 11, 12, 13, 53, 10));
+
+                channel.LastFoundOnlineUtc
+                    .Should().Be(new DateTime(2021, 11, 12, 13, 53, 10));
+            }
+
             [Fact]
             public void UpdateStreamLink_When_ChannelIsOffline()
             {
@@ -32,10 +49,11 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(),
                         "https://youtube.com/channel-link");
 
-                var streamLink = "https://youtube.com/live-link";
-                channel.GoLive(streamLink);
+                channel.GoLive(
+                    "https://youtube.com/live-link",
+                    new DateTime(2011, 06, 23, 09, 38, 27));
 
-                channel.StreamLink.Should().Be(streamLink);
+                channel.StreamLink.Should().Be("https://youtube.com/live-link");
             }
 
             [Fact]
@@ -48,10 +66,34 @@ namespace Enna.Streamers.Domain.Tests.Unit
 
                 var oldStreamStartedUtc = channel.StreamStartedUtc;
 
-                channel.GoLive("https://youtube.com/live-link");
+                channel.GoLive(
+                    "https://youtube.com/live-link",
+                    new DateTime(1993, 06, 28, 16, 20, 08));
 
                 channel.StreamStartedUtc
                     .Should().BeAfter(oldStreamStartedUtc);
+                channel.StreamStartedUtc
+                    .Should().Be(new DateTime(1993, 06, 28, 16, 20, 08));
+            }
+
+            [Fact]
+            public void UpdateStreamEndedUtc_When_ChannelIsOffline()
+            {
+                var channel
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
+
+                var oldStreamStartedUtc = channel.StreamEndedUtc;
+
+                channel.GoLive(
+                    "https://youtube.com/live-link",
+                    new DateTime(1998, 10, 19, 14, 12, 23));
+
+                channel.StreamEndedUtc
+                    .Should().BeAfter(oldStreamStartedUtc);
+                channel.StreamEndedUtc
+                    .Should().Be(new DateTime(1998, 10, 19, 14, 12, 23));
             }
 
             [Fact]
@@ -62,28 +104,61 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(),
                         "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/live-link");
+                channel.GoLive(
+                    "https://youtube.com/live-link", 
+                    new DateTime(1988, 12, 04, 20, 25, 02));
 
                 channel.IsLive.Should().BeTrue();
                 channel.IsOffline.Should().BeFalse();
             }
 
             [Fact]
-            public void DoNothing_When_ChannelIsLive()
+            public void DoNothing_When_ChannelIsAlreadyLive()
             {
                 var channel 
                     = new Channel(
                         Guid.NewGuid(),
                         "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/live-link");
+                channel.GoLive(
+                    "https://youtube.com/live-link", 
+                    new DateTime(2017, 05, 06, 18, 43, 29));
+
                 channel.ClearEvents();
 
-                var oldStreamStartedUtc = channel.StreamStartedUtc;
+                channel.GoLive(
+                    "https://youtube.com/live-link2", 
+                    new DateTime(2017, 05, 06, 19, 00, 00));
 
-                channel.GoLive("https://youtube.com/live-link2");
+                channel.StreamStartedUtc
+                    .Should().Be(new DateTime(2017, 05, 06, 18, 43, 29));
+                channel.StreamLink
+                    .Should().Be("https://youtube.com/live-link");
 
-                channel.StreamStartedUtc.Should().Be(oldStreamStartedUtc);
+                channel.GetEvents().Should().BeEmpty();
+            }
+
+            [Fact]
+            public void UpdateLastFoundOnlineUtc_When_ChannelIsAlreadyLive()
+            {
+                var channel
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
+
+                channel.GoLive(
+                    "https://youtube.com/live-link",
+                    new DateTime(2017, 05, 06, 18, 43, 29));
+
+                channel.ClearEvents();
+
+                channel.GoLive(
+                    "https://youtube.com/live-link2",
+                    new DateTime(2017, 05, 06, 19, 00, 00));
+
+                channel.LastFoundOnlineUtc
+                    .Should().Be(new DateTime(2017, 05, 06, 19, 00, 00));
+
                 channel.GetEvents().Should().BeEmpty();
             }
         }
@@ -98,10 +173,12 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(),
                         "https://youtube.com/channel-link");
 
-                var streamLink = "https://youtube.com/live-link";
-                channel.GoLive(streamLink);
+                channel.GoLive(
+                    "https://youtube.com/live-link", 
+                    new DateTime(2021, 10, 02, 09, 30, 30));
 
-                channel.GoOffline();
+                channel.GoOffline(
+                    new DateTime(2021, 10, 02, 10, 00, 30));
 
                 channel.StreamLink.Should().BeNull();
             }
@@ -114,15 +191,21 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(),
                         "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/live-link");
+                channel.GoLive(
+                    "https://youtube.com/live-link",
+                    new DateTime(2021, 10, 10, 22, 15, 00));
 
                 var oldStreamEndedUtc = channel.StreamEndedUtc;
 
-                channel.GoOffline();
+                channel.GoOffline(
+                    new DateTime(2021, 10, 10, 22, 45, 00));
 
-                channel.StreamEndedUtc.Should().BeAfter(oldStreamEndedUtc);
+                channel.StreamEndedUtc
+                    .Should().BeAfter(oldStreamEndedUtc);
                 channel.StreamEndedUtc
                     .Should().BeAfter(channel.StreamStartedUtc);
+                channel.StreamEndedUtc
+                    .Should().Be(new DateTime(2021, 10, 10, 22, 45, 00));
             }
 
             [Fact]
@@ -133,9 +216,12 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(),
                         "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/live-link");
+                channel.GoLive(
+                    "https://youtube.com/live-link",
+                    new DateTime(1979, 12, 12, 06, 15, 00));
 
-                channel.GoOffline();
+                channel.GoOffline(
+                    new DateTime(1979, 12, 12, 06, 45, 00));
 
                 channel.IsOffline.Should().BeTrue();
                 channel.IsLive.Should().BeFalse();
@@ -149,17 +235,43 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(),
                         "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/live-link");
-                channel.GoOffline();
+                channel.GoLive(
+                    "https://youtube.com/live-link", 
+                    new DateTime(1974, 12, 11, 11, 00, 30));
+
+                channel.GoOffline(
+                    new DateTime(1974, 12, 11, 11, 30, 30));
 
                 channel.ClearEvents();
 
                 var oldStreamEndedUtc = channel.StreamEndedUtc;
 
-                channel.GoOffline();
+                channel.GoOffline(
+                    new DateTime(1974, 12, 11, 11, 40, 30));
 
                 channel.StreamEndedUtc.Should().Be(oldStreamEndedUtc);
+                channel.StreamEndedUtc
+                    .Should().Be(new DateTime(1974, 12, 11, 11, 30, 30));
+
                 channel.GetEvents().Should().BeEmpty();
+            }
+
+            [Fact]
+            public void DoNothing_When_OfflineTimeIsLessThan30Minutes()
+            {
+                var channel
+                    = new Channel(
+                        Guid.NewGuid(),
+                        "https://youtube.com/channel-link");
+
+                channel.GoLive(
+                    "https://youtube.com/live-link",
+                    new DateTime(1979, 12, 12, 06, 15, 00));
+
+                channel.GoOffline(
+                    new DateTime(1979, 12, 12, 06, 30, 00));
+
+                channel.IsLive.Should().BeTrue();
             }
         }
     }

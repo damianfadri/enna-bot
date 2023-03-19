@@ -69,7 +69,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(), 
                         "Friendly name");
 
-                streamer.GoLive("https://youtube.com/stream-link");
+                streamer.GoLive("https://youtube.com/stream-link", DateTime.UtcNow);
 
                 streamer.IsLive.Should().BeTrue();
                 streamer.StreamLink
@@ -84,7 +84,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(), 
                         "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/stream-link");
+                channel.GoLive("https://youtube.com/stream-link", DateTime.UtcNow);
 
                 var streamer =
                     new Streamer(
@@ -93,7 +93,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         channel, 
                         Feed.Default);
 
-                streamer.GoLive("https://youtube.com/stream-link2");
+                streamer.GoLive("https://youtube.com/stream-link2", DateTime.UtcNow);
 
                 streamer.IsLive.Should().BeTrue();
                 streamer.StreamLink
@@ -108,7 +108,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(),
                         "Friendly name");
 
-                streamer.GoLive("https://youtube.com/live-link");
+                streamer.GoLive("https://youtube.com/live-link", DateTime.UtcNow);
 
                 var @event = streamer.GetEvents().Last();
 
@@ -128,7 +128,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(), 
                         "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/stream-link");
+                channel.GoLive("https://youtube.com/stream-link", DateTime.UtcNow);
 
                 var streamer 
                     = new Streamer(
@@ -137,7 +137,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         channel, 
                         Feed.Default);
 
-                streamer.GoOffline();
+                streamer.GoOffline(DateTime.UtcNow);
 
                 streamer.IsLive.Should().BeFalse();
                 streamer.StreamLink.Should().BeNull();
@@ -151,7 +151,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         Guid.NewGuid(),
                         "https://youtube.com/channel-link");
 
-                channel.GoLive("https://youtube.com/stream-link");
+                channel.GoLive("https://youtube.com/stream-link", DateTime.UtcNow);
 
                 var streamer =
                     new Streamer(
@@ -160,7 +160,7 @@ namespace Enna.Streamers.Domain.Tests.Unit
                         channel,
                         Feed.Default);
 
-                streamer.GoOffline();
+                streamer.GoOffline(DateTime.UtcNow);
 
                 var @event = streamer.GetEvents().Last();
 

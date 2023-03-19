@@ -49,7 +49,7 @@ namespace Enna.Streamers.Application.Tests.Unit
                         Guid.NewGuid(),
                         "Friendly name");
 
-                streamer.GoLive("https://youtube.com/live-link");
+                streamer.GoLive("https://youtube.com/live-link", DateTime.UtcNow);
 
                 var handler
                     = new GoOfflineRequestHandlerSutBuilder()

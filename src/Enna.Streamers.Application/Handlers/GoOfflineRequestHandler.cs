@@ -28,7 +28,7 @@ namespace Enna.Streamers.Application.Handlers
                     $"Streamer id {request.StreamerId} does not exist.");
             }
 
-            streamer.GoOffline();
+            streamer.GoOffline(DateTime.UtcNow);
         }
     }
 }
