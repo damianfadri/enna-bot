@@ -3,7 +3,7 @@
 Enna Bot is a streamer notifier for Discord. It sends a customizable message to the channel whenever a specific streamer goes live.
 
 ## Prerequisites
-* .NET 7
+* .NET 8
 * SQL Server
 * Discord Application (see: [Discord Developer Portal](https://discord.com/developers/applications/))
 
